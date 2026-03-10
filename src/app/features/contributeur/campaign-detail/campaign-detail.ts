@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { ContributionService } from '../../../core/services/contribution.service'; // Ton service
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ContributionService } from '../../../core/services/contribution.service';
+import { CampaignService } from '../../../core/services/campaign.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { CampaignResponse } from '../../../models/campaign.model';
 
 @Component({
   selector: 'app-campaign-detail',
@@ -11,44 +14,75 @@ import { ContributionService } from '../../../core/services/contribution.service
   templateUrl: './campaign-detail.html'
 })
 export class CampaignDetail implements OnInit {
-  campagne: any;
-  montantDon: number = 5000; // Montant par défaut
-  isProcessing: boolean = false;
+  campagne: CampaignResponse | null = null;
+  montantDon: number = 5000;
+  telephone: string = '';
+  methodePaiement: 'moov_tg' | 'togocel' = 'moov_tg';
+  isProcessing = false;
+  loadError = '';
+  successMessage = '';
+  errorMessage = '';
 
   constructor(
+    private route: ActivatedRoute,
+    private campaignService: CampaignService,
     private contributionService: ContributionService,
+    private authService: AuthService,
     private router: Router
-  ) { }
+  ) {}
 
-  ngOnInit() {
-    // Ici, tu devrais normalement récupérer l'ID depuis l'URL et charger la campagne
-    // Pour l'instant, on utilise tes données de test ou du backend
+  ngOnInit(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (!id) {
+      this.loadError = 'Identifiant de campagne invalide.';
+      return;
+    }
+    this.campaignService.getCampaignById(id).subscribe({
+      next: (data) => (this.campagne = data),
+      error: () => (this.loadError = 'Impossible de charger cette campagne.')
+    });
   }
 
-  contribuer() {
-    if (this.montantDon <= 0) return;
+  get pourcentage(): number {
+    if (!this.campagne || this.campagne.objectifCfa <= 0) return 0;
+    return Math.min(100, Math.round((this.campagne.montantCollecte / this.campagne.objectifCfa) * 100));
+  }
+
+  contribuer(): void {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    if (!this.campagne) return;
+    if (!this.montantDon || this.montantDon <= 0) {
+      this.errorMessage = 'Veuillez entrer un montant valide.';
+      return;
+    }
+    if (!this.telephone.trim()) {
+      this.errorMessage = 'Veuillez entrer votre numéro de téléphone Mobile Money.';
+      return;
+    }
 
     this.isProcessing = true;
+    this.errorMessage = '';
+    this.successMessage = '';
 
-    // Simulation de l'objet contribution à envoyer au backend sur la branche ATTAEssoLotie
-    const request = {
+    this.contributionService.contribute(this.campagne.id, {
       montant: this.montantDon,
-      telephone: '12345678', // Placeholder, you may want to prompt user for this or get from context
-      methodePaiement: 'moov_tg' as 'moov_tg' | 'togocel'
-    };
-
-    // Appel au service pour enregistrer dans le backend
-    this.contributionService.contribute(this.campagne.id || 1, request).subscribe({
-      next: () => {
-        // Une fois réussi, on redirige vers la liste des contributions
-        setTimeout(() => {
-          this.isProcessing = false;
-          this.router.navigate(['/contributions']);
-        }, 1500); // Petit délai pour l'effet visuel du spinner
-      },
-      error: (err) => {
-        console.error('Erreur lors de la contribution', err);
+      telephone: this.telephone.trim(),
+      methodePaiement: this.methodePaiement
+    }).subscribe({
+      next: (res) => {
         this.isProcessing = false;
+        this.successMessage = `Contribution réussie ! Référence : ${res.referenceTransaction}`;
+        // Reload campaign to update collected amount
+        this.campaignService.getCampaignById(this.campagne!.id).subscribe(
+          updated => (this.campagne = updated)
+        );
+      },
+      error: () => {
+        this.isProcessing = false;
+        this.errorMessage = 'La contribution a échoué. Veuillez réessayer.';
       }
     });
   }

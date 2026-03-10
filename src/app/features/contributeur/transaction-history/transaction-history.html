@@ -4,59 +4,84 @@
     <p class="text-slate-500 mt-1">Consultez et téléchargez vos reçus de paiement.</p>
   </div>
 
+  <!-- Filters bar -->
   <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm mb-6 flex flex-wrap gap-4 items-center justify-between">
     <div class="relative w-full md:w-96">
-      <i class="ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-      <input type="text" placeholder="Rechercher par référence ou campagne..." 
-             class="w-full pl-12 pr-4 py-2.5 bg-slate-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-amber-500/20">
+      <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <input
+        type="text"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+        placeholder="Rechercher par référence ou campagne..."
+        class="w-full pl-12 pr-4 py-2.5 bg-slate-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-amber-500/20 outline-none">
     </div>
-    
     <div class="flex items-center gap-3">
-      <button class="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all">
-        Tous les statuts <i class="ph-funnel"></i>
-      </button>
-      <button class="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all">
-        <i class="ph-download-simple"></i> Exporter
-      </button>
+      <span class="text-sm text-slate-400 font-medium">{{ filtered.length }} résultat(s)</span>
     </div>
   </div>
 
-  <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-    <table class="w-full text-left border-collapse">
-      <thead>
+  <!-- Loading -->
+  @if (loading) {
+    <div class="flex justify-center py-20">
+      <div class="w-10 h-10 border-4 border-slate-200 border-t-amber-500 rounded-full animate-spin"></div>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error) {
+    <div class="p-6 bg-red-50 border border-red-200 rounded-2xl text-red-600 font-medium">{{ error }}</div>
+  }
+
+  <!-- Table -->
+  @if (!loading && !error) {
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+      <table class="w-full text-left border-collapse">
+        <thead>
         <tr class="bg-slate-50/50 text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
           <th class="px-8 py-5">Date</th>
           <th class="px-6 py-5">Référence</th>
           <th class="px-6 py-5">Campagne</th>
-          <th class="px-6 py-5">Méthode</th>
           <th class="px-6 py-5">Montant</th>
+          <th class="px-6 py-5">Net reversé</th>
           <th class="px-6 py-5">Statut</th>
           <th class="px-8 py-5 text-center">Reçu</th>
         </tr>
-      </thead>
-      <tbody class="divide-y divide-slate-50">
-        <tr *ngFor="let t of transactions" class="hover:bg-slate-50/50 transition-colors group">
-          <td class="px-8 py-5 text-sm text-slate-500 font-medium">{{ t.date }}</td>
-          <td class="px-6 py-5 text-sm font-bold text-slate-700 uppercase">{{ t.reference }}</td>
-          <td class="px-6 py-5 text-sm font-bold text-slate-800">{{ t.campagne }}</td>
-          <td class="px-6 py-5 text-sm text-slate-500">{{ t.methode }}</td>
-          <td class="px-6 py-5 text-sm font-black text-slate-900">{{ t.montant | number }} FCFA</td>
-          <td class="px-6 py-5">
-            <span [ngClass]="{
-              'bg-green-100 text-green-700': t.statut === 'Réussie',
-              'bg-amber-100 text-amber-700': t.statut === 'En attente',
-              'bg-red-100 text-red-700': t.statut === 'Échouée'
-            }" class="px-3 py-1 rounded-full text-[10px] font-bold">
-              {{ t.statut }}
-            </span>
-          </td>
-          <td class="px-8 py-5 text-center">
-            <button class="text-amber-600 hover:text-amber-700 transition-transform group-hover:scale-110">
-              <i class="ph-file-pdf text-xl"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          @for (t of filtered; track t.id) {
+            <tr class="hover:bg-slate-50/50 transition-colors group">
+              <td class="px-8 py-5 text-sm text-slate-500 font-medium">
+                {{ t.createdAt | date:'dd/MM/yyyy HH:mm' }}
+              </td>
+              <td class="px-6 py-5 text-xs font-mono font-bold text-slate-600 uppercase">
+                {{ t.referenceTransaction }}
+              </td>
+              <td class="px-6 py-5 text-sm font-bold text-slate-800">{{ t.campaignTitre }}</td>
+              <td class="px-6 py-5 text-sm font-black text-slate-900">{{ t.montant | number }} FCFA</td>
+              <td class="px-6 py-5 text-sm text-slate-600">{{ t.montantNet | number }} FCFA</td>
+              <td class="px-6 py-5">
+                <span [class]="statutClass(t.statut)"
+                      class="px-3 py-1 rounded-full text-[10px] font-bold uppercase">
+                  {{ statutLabel(t.statut) }}
+                </span>
+              </td>
+              <td class="px-8 py-5 text-center">
+                <button class="text-amber-600 hover:text-amber-700 transition-transform group-hover:scale-110"
+                        title="Télécharger le reçu">
+                  <i class="ph ph-file-pdf text-xl"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (filtered.length === 0 && !loading) {
+        <div class="p-16 text-center">
+          <i class="ph ph-receipt text-5xl text-slate-200 block mb-4"></i>
+          <p class="text-slate-400 font-medium">Aucune transaction trouvée.</p>
+        </div>
+      }
+    </div>
+  }
 </div>

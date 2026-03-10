@@ -40,11 +40,11 @@ import { AdminGuard } from './core/guards/admin.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
-  // Auth Routes
+  // Auth Routes (public)
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  // Admin Routes
+  // Admin Routes (protected: logged in + ADMIN role)
   {
     path: 'admin',
     component: AdminLayout,
@@ -59,11 +59,10 @@ const routes: Routes = [
       { path: 'notifications', component: AdminNotifications },
       { path: 'parametres', component: AdminSettings },
       { path: 'deconnexion', component: AdminLogout },
-      { path: '', redirectTo: '', pathMatch: 'full' }
     ]
   },
 
-  // Porteur Routes
+  // Porteur Routes (protected: logged in)
   {
     path: 'porteur',
     component: PorteurLayout,
@@ -79,20 +78,24 @@ const routes: Routes = [
     ]
   },
 
-  // Contributeur Routes
+  // Contributeur Routes (protected: logged in)
+  // NOTE: campaign list & detail are accessible without login (public browsing)
   {
     path: 'contributeur',
+    canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: ContributeurDashboard },
       { path: 'transactions', component: TransactionHistory },
       { path: 'contributions', component: ContributionsComponent },
-      { path: 'campaigns', component: CampaignListComponent },
-      { path: 'campaigns/:id', component: CampaignDetail },
       { path: 'notifications', component: ContributeurNotifications },
       { path: 'profile', component: Profile },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
+
+  // Public campaign browsing (no login required to view)
+  { path: 'campaigns', component: CampaignListComponent },
+  { path: 'campaigns/:id', component: CampaignDetail },
 
   // Default Route
   { path: '', redirectTo: 'login', pathMatch: 'full' },

@@ -5,7 +5,7 @@
       <!-- Header -->
       <div class="modal-header">
         <h2>Créer une nouvelle campagne</h2>
-        <button class="close-btn" (click)="fermer()">
+        <button class="close-btn" (click)="fermer()" type="button">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -15,6 +15,12 @@
       <!-- Body -->
       <div class="modal-body">
 
+        <!-- Global error -->
+        @if (errorMsg()) {
+          <div class="error-banner">{{ errorMsg() }}</div>
+        }
+
+        <!-- Step 1: General info -->
         <div class="step-header">
           <span class="step-number">1</span>
           <span class="step-title">Informations générales</span>
@@ -27,79 +33,126 @@
             type="text"
             [(ngModel)]="form.titre"
             name="titre"
-            placeholder="Ex: Ferme Solaire de Ouagadougou"
+            placeholder="Ex: Ferme Solaire de Lomé"
             [class.input-error]="soumissionTentee && erreurs['titre']"
             class="form-input"/>
           @if (soumissionTentee && erreurs['titre']) {
-            <span class="error-msg">
-              <i class="fa-solid fa-circle-exclamation"></i>
-              {{ erreurs['titre'] }}
-            </span>
+            <span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ erreurs['titre'] }}</span>
           }
         </div>
 
-        <!-- Catégorie + Localisation -->
+        <!-- Catégorie -->
+        <div class="form-group">
+          <label>Catégorie <span class="required">*</span></label>
+          <select
+            [(ngModel)]="form.categorie"
+            name="categorie"
+            [class.input-error]="soumissionTentee && erreurs['categorie']"
+            class="form-select">
+            <option value="" disabled>Sélectionner une catégorie</option>
+            @for (cat of categories; track cat) {
+              <option [value]="cat">{{ cat }}</option>
+            }
+          </select>
+          @if (soumissionTentee && erreurs['categorie']) {
+            <span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ erreurs['categorie'] }}</span>
+          }
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label>Description <span class="required">*</span></label>
+          <textarea
+            [(ngModel)]="form.description"
+            name="description"
+            placeholder="Décrivez votre projet en détail : objectifs, impact attendu, plan d'action..."
+            [class.input-error]="soumissionTentee && erreurs['description']"
+            class="form-textarea"
+            rows="5">
+          </textarea>
+          @if (soumissionTentee && erreurs['description']) {
+            <span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ erreurs['description'] }}</span>
+          }
+        </div>
+
+        <!-- Step 2: Financials -->
+        <div class="step-header" style="margin-top: 24px;">
+          <span class="step-number">2</span>
+          <span class="step-title">Objectif financier & Durée</span>
+        </div>
+
+        <!-- Objectif CFA -->
+        <div class="form-group">
+          <label>Objectif de collecte (CFA) <span class="required">*</span></label>
+          <input
+            type="number"
+            [(ngModel)]="form.objectifCfa"
+            name="objectifCfa"
+            placeholder="Ex: 5000000"
+            min="10000"
+            [class.input-error]="soumissionTentee && erreurs['objectifCfa']"
+            class="form-input"/>
+          @if (soumissionTentee && erreurs['objectifCfa']) {
+            <span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ erreurs['objectifCfa'] }}</span>
+          }
+        </div>
+
+        <!-- Dates -->
         <div class="form-row">
           <div class="form-group">
-            <label>Catégorie <span class="required">*</span></label>
-            <select
-              [(ngModel)]="form.categorie"
-              name="categorie"
-              [class.input-error]="soumissionTentee && erreurs['categorie']"
-              class="form-select">
-              <option value="" disabled selected>Sélectionner une catégorie</option>
-              @for (cat of categories; track cat) {
-                <option [value]="cat">{{ cat }}</option>
-              }
-            </select>
-            @if (soumissionTentee && erreurs['categorie']) {
-              <span class="error-msg">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                {{ erreurs['categorie'] }}
-              </span>
+            <label>Date de début <span class="required">*</span></label>
+            <input
+              type="date"
+              [(ngModel)]="form.dateDebut"
+              name="dateDebut"
+              [class.input-error]="soumissionTentee && erreurs['dateDebut']"
+              class="form-input"/>
+            @if (soumissionTentee && erreurs['dateDebut']) {
+              <span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ erreurs['dateDebut'] }}</span>
             }
           </div>
-
           <div class="form-group">
-            <label>Localisation <span class="optional">(optionnel)</span></label>
+            <label>Date de fin <span class="required">*</span></label>
             <input
-              type="text"
-              [(ngModel)]="form.localisation"
-              name="localisation"
-              placeholder="Ex: Dakar, Sénégal"
+              type="date"
+              [(ngModel)]="form.dateFin"
+              name="dateFin"
+              [class.input-error]="soumissionTentee && erreurs['dateFin']"
               class="form-input"/>
+            @if (soumissionTentee && erreurs['dateFin']) {
+              <span class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ erreurs['dateFin'] }}</span>
+            }
           </div>
         </div>
 
-        <!-- Résumé -->
+        <!-- Step 3: Media (optional) -->
+        <div class="step-header" style="margin-top: 24px;">
+          <span class="step-number">3</span>
+          <span class="step-title">Image <span class="optional">(optionnel)</span></span>
+        </div>
+
+        <!-- Image URL -->
         <div class="form-group">
-          <label>Résumé court <span class="required">*</span></label>
-          <textarea
-            [(ngModel)]="form.resume"
-            name="resume"
-            placeholder="Une phrase d'accroche pour présenter votre projet..."
-            [class.input-error]="soumissionTentee && erreurs['resume']"
-            class="form-textarea"
-            rows="4">
-          </textarea>
-          @if (soumissionTentee && erreurs['resume']) {
-            <span class="error-msg">
-              <i class="fa-solid fa-circle-exclamation"></i>
-              {{ erreurs['resume'] }}
-            </span>
-          }
+          <label>URL de l'image de couverture</label>
+          <input
+            type="url"
+            [(ngModel)]="form.imageUrl"
+            name="imageUrl"
+            placeholder="https://exemple.com/image.jpg"
+            class="form-input"/>
+          <p class="hint">Lien direct vers une image (JPG, PNG). Laissez vide pour utiliser l'image par défaut.</p>
         </div>
 
       </div>
 
       <!-- Footer -->
       <div class="modal-footer">
-        <button class="btn-annuler" (click)="annuler()">Annuler</button>
-        <button class="btn-brouillon" (click)="enregistrerBrouillon()">
-          Enregistrer comme brouillon
+        <button class="btn-annuler" (click)="annuler()" type="button">Annuler</button>
+        <button class="btn-brouillon" (click)="enregistrerBrouillon()" [disabled]="saving()" type="button">
+          {{ saving() ? 'Sauvegarde...' : 'Enregistrer comme brouillon' }}
         </button>
-        <button class="btn-soumettre" (click)="soumettre()">
-          Soumettre à validation
+        <button class="btn-soumettre" (click)="soumettre()" [disabled]="saving()" type="button">
+          {{ saving() ? 'Envoi en cours...' : 'Soumettre à validation' }}
         </button>
       </div>
 

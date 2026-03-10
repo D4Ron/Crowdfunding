@@ -1,47 +1,61 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { ContributionService } from '../../../core/services/contribution.service';
-import { ContributionResponse as Contribution } from '../../../models/contribution.model';
+import { ContributionResponse } from '../../../models/contribution.model';
 
 @Component({
   selector: 'app-transaction-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './transaction-history.html'
 })
-export class TransactionHistory {
-  transactions = [
-    {
-      date: '15 Fév 2026',
-      reference: 'LVN-TRX-20481',
-      campagne: 'Ferme Solaire Kaolack',
-      methode: 'Mobile Money',
-      montant: 350000,
-      statut: 'Réussie'
-    },
-    {
-      date: '02 Fév 2026',
-      reference: 'LEV-2026-98431',
-      campagne: 'Coopérative Agricole de Thiès',
-      methode: 'Virement Bancaire',
-      montant: 500000,
-      statut: 'Réussie'
-    },
-    {
-      date: '28 Jan 2026',
-      reference: 'TXN-LVA-55210',
-      campagne: 'Atelier Textile Bamako',
-      methode: 'Carte Bancaire',
-      montant: 200000,
-      statut: 'En attente'
-    },
-    {
-      date: '25 Jan 2026',
-      reference: 'LVN-ERR-99210',
-      campagne: 'Clinique Mobile Santé',
-      methode: 'Carte Bancaire',
-      montant: 50000,
-      statut: 'Échouée'
-    }
-  ];
+export class TransactionHistory implements OnInit {
+  allTransactions: ContributionResponse[] = [];
+  loading = true;
+  error = '';
+  searchQuery = signal('');
+
+  constructor(private contributionService: ContributionService) {}
+
+  ngOnInit(): void {
+    this.contributionService.getMyContributions().subscribe({
+      next: (data) => {
+        this.allTransactions = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Impossible de charger l\'historique.';
+        this.loading = false;
+      }
+    });
+  }
+
+  get filtered(): ContributionResponse[] {
+    const q = this.searchQuery().toLowerCase().trim();
+    if (!q) return this.allTransactions;
+    return this.allTransactions.filter(t =>
+      t.referenceTransaction?.toLowerCase().includes(q) ||
+      t.campaignTitre?.toLowerCase().includes(q)
+    );
+  }
+
+  statutLabel(statut: string): string {
+    const map: Record<string, string> = {
+      SUCCESS: 'Réussie',
+      PENDING: 'En attente',
+      FAILED: 'Échouée'
+    };
+    return map[statut] ?? statut;
+  }
+
+  statutClass(statut: string): string {
+    const map: Record<string, string> = {
+      SUCCESS: 'bg-green-100 text-green-700',
+      PENDING: 'bg-amber-100 text-amber-700',
+      FAILED: 'bg-red-100 text-red-700'
+    };
+    return map[statut] ?? 'bg-slate-100 text-slate-500';
+  }
 }

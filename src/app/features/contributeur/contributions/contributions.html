@@ -4,18 +4,32 @@
     <p class="text-slate-500 mt-1">Suivez l'évolution des projets que vous financez.</p>
   </div>
 
-  <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
-    
-    <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-white">
-      <h2 class="text-xl font-bold text-slate-800">Mes contributions récentes</h2>
-      <button class="text-amber-600 text-sm font-bold hover:text-amber-700 transition-colors flex items-center gap-2">
-        Voir tout <i class="ph-caret-right font-bold"></i>
-      </button>
+  <!-- Loading -->
+  @if (loading) {
+    <div class="flex justify-center py-20">
+      <div class="w-10 h-10 border-4 border-slate-200 border-t-amber-500 rounded-full animate-spin"></div>
     </div>
+  }
 
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse">
-        <thead>
+  <!-- Error -->
+  @if (error) {
+    <div class="p-6 bg-red-50 border border-red-200 rounded-2xl text-red-600 font-medium">
+      {{ error }}
+    </div>
+  }
+
+  <!-- Data table -->
+  @if (!loading && !error) {
+    <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+
+      <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-white">
+        <h2 class="text-xl font-bold text-slate-800">Mes contributions récentes</h2>
+        <span class="text-sm text-slate-400 font-medium">{{ contributions.length }} transaction(s)</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
           <tr class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] border-b border-slate-50 bg-slate-50/30">
             <th class="px-8 py-5">Campagne</th>
             <th class="px-6 py-5">Montant</th>
@@ -24,61 +38,82 @@
             <th class="px-6 py-5">Référence</th>
             <th class="px-8 py-5 text-right">Actions</th>
           </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-50">
-          <tr *ngFor="let item of contributions" class="hover:bg-slate-50/50 transition-colors group">
-            
-            <td class="px-8 py-6">
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-2xl bg-[#1E293B] flex items-center justify-center text-white font-bold shadow-lg shadow-slate-200">
-                  {{ item.campagne.charAt(0) }}
-                </div>
-                <div>
-                  <p class="font-bold text-slate-800 text-sm mb-0.5">{{ item.campagne }}</p>
-                  <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{{ item.secteur }}</p>
-                </div>
-              </div>
-            </td>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            @for (item of contributions; track item.id) {
+              <tr class="hover:bg-slate-50/50 transition-colors group">
 
-            <td class="px-6 py-6">
-              <span class="font-black text-slate-900 text-sm">{{ item.montant | number }} FCFA</span>
-            </td>
+                <!-- Campaign name with avatar -->
+                <td class="px-8 py-6">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-[#1E293B] flex items-center justify-center text-white font-bold shadow-lg shadow-slate-200">
+                      {{ item.campaignTitre.charAt(0) }}
+                    </div>
+                    <div>
+                      <p class="font-bold text-slate-800 text-sm mb-0.5">{{ item.campaignTitre }}</p>
+                      <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                        {{ item.contributeurNom }}
+                      </p>
+                    </div>
+                  </div>
+                </td>
 
-            <td class="px-6 py-6 text-[13px] text-slate-500 font-medium">
-              {{ item.date }}
-            </td>
+                <!-- Amount -->
+                <td class="px-6 py-6">
+                  <span class="font-black text-slate-900 text-sm">{{ item.montant | number }} FCFA</span>
+                  @if (item.commission) {
+                    <p class="text-[10px] text-slate-400 mt-0.5">Commission : {{ item.commission | number }} FCFA</p>
+                  }
+                </td>
 
-            <td class="px-6 py-6">
-              <span [ngClass]="{
-                'bg-green-100 text-green-700': item.statut === 'Réussie',
-                'bg-amber-100 text-amber-700': item.statut === 'En attente'
-              }" class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-transparent">
-                {{ item.statut }}
-              </span>
-            </td>
+                <!-- Date -->
+                <td class="px-6 py-6 text-[13px] text-slate-500 font-medium">
+                  {{ item.createdAt | date:'dd MMM yyyy' }}
+                </td>
 
-            <td class="px-6 py-6 text-[11px] font-mono text-slate-400 font-bold uppercase">
-              {{ item.reference }}
-            </td>
+                <!-- Status badge -->
+                <td class="px-6 py-6">
+                  <span [class]="statutClass(item.statut)"
+                        class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">
+                    {{ statutLabel(item.statut) }}
+                  </span>
+                </td>
 
-            <td class="px-8 py-6 text-right">
-              <div class="flex justify-end gap-4 text-slate-300">
-                <button title="Télécharger le reçu" class="hover:text-amber-600 transition-colors transform hover:scale-110">
-                  <i class="ph-file-pdf text-xl"></i>
-                </button>
-                <button title="Partager" class="hover:text-slate-900 transition-colors transform hover:scale-110">
-                  <i class="ph-share-network text-xl"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <!-- Reference -->
+                <td class="px-6 py-6 text-[11px] font-mono text-slate-400 font-bold uppercase">
+                  {{ item.referenceTransaction }}
+                </td>
+
+                <!-- Actions -->
+                <td class="px-8 py-6 text-right">
+                  <div class="flex justify-end gap-4 text-slate-300">
+                    <button title="Télécharger le reçu"
+                            class="hover:text-amber-600 transition-colors transform hover:scale-110">
+                      <i class="ph ph-file-pdf text-xl"></i>
+                    </button>
+                    <button title="Partager"
+                            class="hover:text-slate-900 transition-colors transform hover:scale-110">
+                      <i class="ph ph-share-network text-xl"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty state -->
+      @if (contributions.length === 0) {
+        <div class="p-20 text-center">
+          <i class="ph ph-hand-coins text-6xl text-slate-100 mb-4 block"></i>
+          <p class="text-slate-400 font-medium">Vous n'avez pas encore effectué de contribution.</p>
+          <a routerLink="/campaigns"
+             class="inline-block mt-6 px-6 py-3 bg-amber-500 text-white font-bold rounded-full text-sm hover:bg-amber-600 transition-colors">
+            Explorer les campagnes
+          </a>
+        </div>
+      }
     </div>
-
-    <div *ngIf="contributions.length === 0" class="p-20 text-center">
-      <i class="ph-hand-coins text-6xl text-slate-100 mb-4"></i>
-      <p class="text-slate-400 font-medium">Vous n'avez pas encore effectué de contribution.</p>
-    </div>
-  </div>
+  }
 </div>
