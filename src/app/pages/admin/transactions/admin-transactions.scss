@@ -1,0 +1,6 @@
+@use '../admin-shared' as *;
+
+.table-head,
+.table-row {
+    grid-template-columns: 1.3fr 1fr 1fr 1fr 1fr 0.9fr 0.8fr;
+}

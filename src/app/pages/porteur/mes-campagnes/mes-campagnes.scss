@@ -1,0 +1,157 @@
+.mes-campagnes {
+  padding: 28px;
+  background-color: #F7F7F2;
+  min-height: 100%;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    h2 { font-size: 22px; font-weight: 700; color: #0B1020; margin: 0; }
+
+    .filters {
+      display: flex; gap: 8px;
+      .filter-btn {
+        padding: 8px 18px; border-radius: 20px;
+        border: 1px solid #E5E7EB; background: #FFFFFF;
+        font-size: 13px; color: #6B7280; cursor: pointer;
+        font-family: 'Inter', sans-serif; transition: all 0.2s;
+        &:hover { border-color: #C9A86A; color: #C9A86A; }
+        &.active { background: #0B1020; color: #FFFFFF; border-color: #0B1020; font-weight: 600; }
+      }
+    }
+  }
+
+  .campaigns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .campaign-card {
+    display: flex;
+    background: #FFFFFF;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #EEEEEA;
+    transition: box-shadow 0.2s;
+
+    &:hover { box-shadow: 0 4px 20px rgba(11,16,32,0.08); }
+
+    .campaign-img {
+      position: relative;
+      width: 250px;
+      flex-shrink: 0;
+
+      img {
+        width: 100%; height: 100%; object-fit: cover;
+      }
+
+      .img-placeholder {
+        width: 100%; height: 100%; min-height: 160px;
+        background: #F3F4F6;
+        display: flex; align-items: center; justify-content: center;
+        color: #D1D5DB;
+      }
+
+      .badge-status {
+        position: absolute; top: 12px; left: 12px;
+        padding: 4px 12px; border-radius: 20px;
+        font-size: 11px; font-weight: 600;
+        &.active    { background: #DCFCE7; color: #15803D; }
+        &.terminee  { background: #1a1a2e; color: #FFFFFF; }
+        &.soumise   { background: #FEF3C7; color: #92400E; }
+        &.brouillon { background: #EFF6FF; color: #1D4ED8; }
+      }
+
+      .badge-category {
+        position: absolute; top: 12px; right: 12px;
+        padding: 4px 12px; border-radius: 20px;
+        font-size: 11px; font-weight: 600;
+        background: #0B1020; color: #C9A86A;
+      }
+    }
+
+    .campaign-body {
+      padding: 20px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      h3 { font-size: 17px; font-weight: 700; color: #0B1020; margin: 0 0 6px; }
+      p  { font-size: 13px; color: #6B7280; margin: 0 0 16px; line-height: 1.5; }
+
+      .amounts {
+        display: flex; justify-content: space-between;
+        align-items: baseline; margin-bottom: 8px;
+        .collected { font-size: 15px; font-weight: 700; color: #0B1020; }
+        .goal      { font-size: 12px; color: #9CA3AF; }
+      }
+
+      .progress-bar {
+        height: 6px; background: #F3F4F6; border-radius: 4px;
+        margin-bottom: 12px; overflow: hidden;
+        .progress-fill {
+          height: 100%; background: #C9A86A; border-radius: 4px;
+          &.full { background: #C9A86A; }
+        }
+      }
+
+      .campaign-meta {
+        display: flex; gap: 20px; margin-bottom: 16px;
+        .meta-item {
+          display: flex; align-items: center; gap: 5px;
+          font-size: 13px; color: #6B7280;
+        }
+      }
+
+      .campaign-actions {
+        display: flex; gap: 8px; justify-content: flex-end;
+        margin-top: auto;
+
+        .action-btn {
+          width: 34px; height: 34px; border-radius: 8px;
+          border: 1px solid #E5E7EB; background: #FFFFFF;
+          cursor: pointer; display: flex; align-items: center;
+          justify-content: center; color: #6B7280;
+          transition: all 0.2s;
+          &:hover { border-color: #C9A86A; color: #C9A86A; }
+          &.danger:hover { border-color: #EF4444; color: #EF4444; background: #FEF2F2; }
+        }
+
+        .submit-btn {
+          width: auto; padding: 0 14px; gap: 6px;
+          background: transparent; border-color: #C9A86A;
+          color: #C9A86A; font-size: 13px; font-weight: 600;
+          font-family: 'Inter', sans-serif;
+          &:hover { background: #C9A86A; color: #0B1020; }
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    background: #FFFFFF; border-radius: 12px;
+    border: 1px solid #EEEEEA; padding: 80px 32px;
+    text-align: center;
+
+    .empty-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: #F3F4F6; color: #9CA3AF;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    h4 { font-size: 16px; font-weight: 600; color: #0B1020; margin: 0 0 10px; }
+    p  { font-size: 13px; color: #6B7280; margin: 0 0 24px; }
+
+    .btn-creer {
+      padding: 12px 28px; background: #C9A86A; color: #0B1020;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      &:hover { background: #b8954f; }
+    }
+  }
+}

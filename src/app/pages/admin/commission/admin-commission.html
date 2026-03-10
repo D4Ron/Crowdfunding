@@ -1,0 +1,43 @@
+<h2 class="page-title"><span class="title-dot"></span> Taux de commission</h2>
+
+<section class="card commission-card">
+    <div class="card-icon">%</div>
+    <div class="card-body">
+        <div class="card-title">Gestion de la commission</div>
+        <div class="card-desc">Ce taux s'applique à toutes les campagnes validées sur la plateforme.</div>
+    </div>
+</section>
+
+<section class="card rate-section">
+    <div class="current-rate">
+        <span class="rate-label">Taux actuel :</span>
+        <span class="rate-value">{{ currentRate() !== null ? (currentRate() + '%') : '—' }}</span>
+    </div>
+    <div class="rate-form">
+        <input class="rate-input" type="number" step="0.1" min="0" max="100" [value]="inputRate()"
+            (input)="inputRate.set($any($event.target).value)" placeholder="Nouveau taux (ex: 5)" />
+        <span class="rate-unit">%</span>
+        <button class="btn btn-primary" (click)="onUpdate()" [disabled]="saving()">
+            {{ saving() ? 'Enregistrement...' : 'Mettre à jour le taux' }}
+        </button>
+    </div>
+    <div class="success-msg" *ngIf="successMsg()">✓ {{ successMsg() }}</div>
+</section>
+
+<section class="card">
+    <div class="history-title">Historique des modifications</div>
+    <div *ngIf="history().length > 0; else noHistory">
+        <div class="history-row" *ngFor="let h of history()">
+            <div class="hist-line">
+                <span class="muted">Modification :</span>
+                <span class="from-val">{{ h.from ?? '—' }}%</span>
+                <span class="arrow">→</span>
+                <span class="to-val">{{ h.to ?? '—' }}%</span>
+            </div>
+            <div class="hist-meta">Par {{ h.author ?? '—' }} · {{ h.date ?? '—' }}</div>
+        </div>
+    </div>
+    <ng-template #noHistory>
+        <div class="empty-text">Aucun historique de modification disponible.</div>
+    </ng-template>
+</section>

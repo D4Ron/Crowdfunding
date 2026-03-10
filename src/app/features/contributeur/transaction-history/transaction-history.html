@@ -1,0 +1,62 @@
+<div class="p-8 max-w-7xl mx-auto animate-in fade-in duration-500">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-800 tracking-tight">Historique des transactions</h1>
+    <p class="text-slate-500 mt-1">Consultez et téléchargez vos reçus de paiement.</p>
+  </div>
+
+  <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm mb-6 flex flex-wrap gap-4 items-center justify-between">
+    <div class="relative w-full md:w-96">
+      <i class="ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+      <input type="text" placeholder="Rechercher par référence ou campagne..." 
+             class="w-full pl-12 pr-4 py-2.5 bg-slate-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-amber-500/20">
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <button class="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all">
+        Tous les statuts <i class="ph-funnel"></i>
+      </button>
+      <button class="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all">
+        <i class="ph-download-simple"></i> Exporter
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="bg-slate-50/50 text-[11px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">
+          <th class="px-8 py-5">Date</th>
+          <th class="px-6 py-5">Référence</th>
+          <th class="px-6 py-5">Campagne</th>
+          <th class="px-6 py-5">Méthode</th>
+          <th class="px-6 py-5">Montant</th>
+          <th class="px-6 py-5">Statut</th>
+          <th class="px-8 py-5 text-center">Reçu</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-50">
+        <tr *ngFor="let t of transactions" class="hover:bg-slate-50/50 transition-colors group">
+          <td class="px-8 py-5 text-sm text-slate-500 font-medium">{{ t.date }}</td>
+          <td class="px-6 py-5 text-sm font-bold text-slate-700 uppercase">{{ t.reference }}</td>
+          <td class="px-6 py-5 text-sm font-bold text-slate-800">{{ t.campagne }}</td>
+          <td class="px-6 py-5 text-sm text-slate-500">{{ t.methode }}</td>
+          <td class="px-6 py-5 text-sm font-black text-slate-900">{{ t.montant | number }} FCFA</td>
+          <td class="px-6 py-5">
+            <span [ngClass]="{
+              'bg-green-100 text-green-700': t.statut === 'Réussie',
+              'bg-amber-100 text-amber-700': t.statut === 'En attente',
+              'bg-red-100 text-red-700': t.statut === 'Échouée'
+            }" class="px-3 py-1 rounded-full text-[10px] font-bold">
+              {{ t.statut }}
+            </span>
+          </td>
+          <td class="px-8 py-5 text-center">
+            <button class="text-amber-600 hover:text-amber-700 transition-transform group-hover:scale-110">
+              <i class="ph-file-pdf text-xl"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+@if (campagne) {
+<div class="p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+
+  <nav class="flex text-sm text-slate-400 gap-2">
+    <a routerLink="/contributeur/campaigns" class="hover:text-amber-500 transition-colors">Campagnes</a>
+    <span>/</span>
+    <span class="text-slate-600 font-medium">{{ campagne.titre }}</span>
+  </nav>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <div class="lg:col-span-2 space-y-6">
+      <div class="aspect-video bg-slate-100 rounded-3xl overflow-hidden shadow-sm border border-slate-100">
+        <img [src]="campagne.imageUrl" class="w-full h-full object-cover" [alt]="campagne.titre">
+      </div>
+
+      <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-4">
+        <span class="px-4 py-1.5 bg-amber-100 text-amber-700 rounded-full text-xs font-bold uppercase tracking-widest">
+          {{ campagne.categorie }}
+        </span>
+        <h1 class="text-3xl font-bold text-slate-800">{{ campagne.titre }}</h1>
+        <p class="text-slate-600 leading-relaxed text-lg">
+          {{ campagne.description }}
+        </p>
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl lg:sticky lg:top-8">
+        <div class="mb-6 space-y-2">
+          <div class="flex justify-between items-end">
+            <span class="text-3xl font-black text-slate-800">{{ campagne.montantCollecte | number }}</span>
+            <span class="text-slate-400 text-sm mb-1">CFA récoltés</span>
+          </div>
+
+          <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+            <div class="bg-amber-500 h-full transition-all duration-1000"
+              [style.width.%]="(campagne.montantCollecte / campagne.objectif) * 100"></div>
+          </div>
+
+          <div class="flex justify-between text-xs font-bold">
+            <span class="text-amber-600">{{ (campagne.montantCollecte / campagne.objectif) * 100 | number:'1.0-0'
+              }}%</span>
+            <span class="text-slate-500">Objectif : {{ campagne.objectif | number }} CFA</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <label class="block text-sm font-bold text-slate-700">Votre contribution (CFA)</label>
+          <input type="number" [(ngModel)]="montantDon" name="montantDon" placeholder="Ex: 5000"
+            class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:border-amber-500 focus:ring-0 focus:outline-none font-bold text-xl transition-all">
+
+          <button (click)="contribuer()" [disabled]="isProcessing || !montantDon || montantDon <= 0"
+            class="w-full bg-slate-900 hover:bg-black disabled:bg-slate-300 disabled:cursor-not-allowed text-white py-5 rounded-2xl font-bold text-lg shadow-lg shadow-slate-200 transition-all flex justify-center items-center gap-2">
+
+            @if (isProcessing) {
+            <span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            <span>Traitement...</span>
+            } @else {
+            <i class="ph-hand-heart text-2xl"></i>
+            <span>Soutenir ce projet</span>
+            }
+          </button>
+
+          <p class="text-center text-[10px] text-slate-400 px-4">
+            En cliquant sur le bouton, vous acceptez nos conditions générales d'utilisation et le transfert sécurisé de
+            vos fonds.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+} @else {
+<div class="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+  <div class="w-12 h-12 border-4 border-slate-200 border-t-amber-500 rounded-full animate-spin"></div>
+  <p class="text-slate-400 font-medium animate-pulse">Chargement de la campagne...</p>
+</div>
+}

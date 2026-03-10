@@ -1,0 +1,185 @@
+<div class="dashboard">
+
+  <!-- Bienvenue -->
+  <div class="welcome-card">
+    <h1>Bienvenue dans votre espace FoundTogo</h1>
+    <p>Gérez vos campagnes, suivez vos financements et développez vos projets depuis votre tableau de bord personnel.
+      L'excellence au service de votre vision.</p>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">Campagnes actives</span>
+        <svg fill="none" stroke="#C9A86A" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+        </svg>
+      </div>
+      <div class="kpi-value">3</div>
+      <div class="kpi-trend positive">+1 ce mois</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">Montant total collecté</span>
+        <svg fill="none" stroke="#C9A86A" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+      </div>
+      <div class="kpi-value large">24 750 000 FCFA</div>
+      <div class="kpi-trend positive">+12% vs mois dernier</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">Contributeurs cumulés</span>
+        <svg fill="none" stroke="#C9A86A" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 20h5v-2a4 4 0 0 0-5-3.87M9 20H4v-2a4 4 0 0 1 5-3.87m3-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zm6 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
+        </svg>
+      </div>
+      <div class="kpi-value">847</div>
+      <div class="kpi-trend positive">+45 cette semaine</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-label">Campagnes en brouillon</span>
+        <svg fill="none" stroke="#C9A86A" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z" />
+        </svg>
+      </div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-trend neutral">À finaliser</div>
+    </div>
+  </div>
+
+  <!-- Contenu bas -->
+  <div class="bottom-grid">
+
+    <!-- Campagnes -->
+    <div class="campaigns-section">
+      <div class="section-header">
+        <h3>Campagnes récentes</h3>
+        <a href="#" class="voir-tout">Voir tout</a>
+      </div>
+      <h4 class="mes-campagnes-title">Mes campagnes</h4>
+
+      <!-- Filtres dynamiques -->
+      <div class="filters">
+        @for (filter of filters; track filter) {
+        <button class="filter-btn" [class.active]="activeFilter() === filter" (click)="setFilter(filter)">
+          {{ filter }}
+        </button>
+        }
+      </div>
+
+      <!-- Campagnes filtrées -->
+      @if (filteredCampaigns().length > 0) {
+      @for (c of filteredCampaigns(); track c.id) {
+      <div class="campaign-card">
+        <div class="campaign-img">
+          <img [src]="c.imageUrl" [alt]="c.title" />
+          <span class="badge-status" [ngClass]="c.status">{{ c.statusLabel }}</span>
+          <span class="badge-category">{{ c.category }}</span>
+        </div>
+        <div class="campaign-body">
+          <h4>{{ c.title }}</h4>
+          <p>{{ c.description }}</p>
+          <div class="amounts">
+            <span class="collected">{{ c.collected }} F CFA</span>
+            <span class="goal">sur {{ c.goal }} F CFA</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="c.progress"></div>
+          </div>
+          <div class="campaign-meta">
+            <span class="meta-item">⏱ {{ c.progress }}%</span>
+            <span class="meta-item">👥 {{ c.contributors }} contributeurs</span>
+            <span class="meta-item">🕐 {{ c.daysLeft }} jours restants</span>
+          </div>
+          <div class="campaign-actions">
+            <button class="action-btn" title="Voir">👁</button>
+            <button class="action-btn" title="Modifier">✏️</button>
+            <button class="action-btn danger" title="Supprimer">🗑</button>
+          </div>
+        </div>
+      </div>
+      }
+      } @else {
+      <!-- État vide -->
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="32" height="32">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M3 4a1 1 0 0 1 1-1h1.586a1 1 0 0 1 .707.293L7.707 4.707A1 1 0 0 0 8.414 5H20a1 1 0 0 1 .894 1.447l-4 8A1 1 0 0 1 16 15H5a1 1 0 0 1-.949-.684L2.051 5.316A1 1 0 0 1 3 4z" />
+          </svg>
+        </div>
+        <h4>Aucune campagne trouvée</h4>
+        <p>Vous n'avez aucune campagne correspondant à ce filtre.<br />
+          Créez une nouvelle campagne pour commencer votre levée de fonds.</p>
+        <button class="btn-creer" routerLink="/porteur/creer-campagne">
+          + Créer ma première campagne
+        </button>
+      </div>
+      }
+    </div>
+
+    <!-- Activité récente -->
+    <div class="activity-section">
+      <h3>Activité récente</h3>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-icon green">$</div>
+          <div class="activity-content">
+            <span class="activity-time">Il y a 2 heures</span>
+            <p>Nouvelle contribution de 50 000 FCFA reçue.</p>
+            <span class="activity-camp">Campag...</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon orange">◎</div>
+          <div class="activity-content">
+            <span class="activity-time">Il y a 5 heures</span>
+            <p>Objectif atteint à 50% !</p>
+            <span class="activity-camp">Campag...</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon blue">✈</div>
+          <div class="activity-content">
+            <span class="activity-time">Hier à 11:15</span>
+            <p>Campagne soumise pour validation.</p>
+            <span class="activity-camp">Campag...</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon gray">+</div>
+          <div class="activity-content">
+            <span class="activity-time">Hier à 16:45</span>
+            <p>Brouillon de campagne créé.</p>
+            <span class="activity-camp">Campag...</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon green">$</div>
+          <div class="activity-content">
+            <span class="activity-time">Il y a 2 jours</span>
+            <p>Nouvelle contribution de 150 000 FCFA reçue.</p>
+            <span class="activity-camp">Campag...</span>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon check">✓</div>
+          <div class="activity-content">
+            <span class="activity-time">Il y a 1 semaine</span>
+            <p>Votre campagne a été validée par l'équipe FoundTogo.</p>
+            <span class="activity-camp">Campag...</span>
+          </div>
+        </div>
+      </div>
+      <button class="voir-activite">Voir toute l'activité</button>
+    </div>
+
+  </div>
+</div>

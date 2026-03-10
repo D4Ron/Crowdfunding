@@ -1,0 +1,45 @@
+<div class="sidebar">
+  <div class="brand">
+    <div class="brand-logo"></div>
+    <div class="brand-name">FoundTogo</div>
+  </div>
+
+  <nav class="nav-links">
+    <a routerLink="/porteur/dashboard" routerLinkActive="active">
+      <i class="fa-solid fa-table-columns"></i>
+      <span>Vue d'ensemble</span>
+    </a>
+    <a routerLink="/porteur/mes-campagnes" routerLinkActive="active">
+      <i class="fa-solid fa-folder-open"></i>
+      <span>Mes campagnes</span>
+    </a>
+    <a routerLink="/porteur/creer-campagne" routerLinkActive="active">
+      <i class="fa-solid fa-circle-plus"></i>
+      <span>Créer une campagne</span>
+    </a>
+    <a routerLink="/porteur/statistiques" routerLinkActive="active">
+      <i class="fa-solid fa-chart-line"></i>
+      <span>Statistiques</span>
+    </a>
+    <a routerLink="/porteur/notifications" routerLinkActive="active">
+      <i class="fa-solid fa-bell"></i>
+      <span>Notifications</span>
+      <span class="badge">2</span>
+    </a>
+    <a routerLink="/porteur/parametres" routerLinkActive="active">
+      <i class="fa-solid fa-gear"></i>
+      <span>Paramètres</span>
+    </a>
+  </nav>
+
+  <div class="footer-links">
+    <a routerLink="/porteur/aide">
+      <i class="fa-solid fa-circle-question"></i>
+      <span>Aide & Support</span>
+    </a>
+    <a (click)="onLogout()" class="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span>Déconnexion</span>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+@if (isOpen()) {
+  <div class="modal-overlay" (click)="fermer()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <h2>Créer une nouvelle campagne</h2>
+        <button class="close-btn" (click)="fermer()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <div class="step-header">
+          <span class="step-number">1</span>
+          <span class="step-title">Informations générales</span>
+        </div>
+
+        <!-- Titre -->
+        <div class="form-group">
+          <label>Titre de la campagne <span class="required">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="form.titre"
+            name="titre"
+            placeholder="Ex: Ferme Solaire de Ouagadougou"
+            [class.input-error]="soumissionTentee && erreurs['titre']"
+            class="form-input"/>
+          @if (soumissionTentee && erreurs['titre']) {
+            <span class="error-msg">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ erreurs['titre'] }}
+            </span>
+          }
+        </div>
+
+        <!-- Catégorie + Localisation -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>Catégorie <span class="required">*</span></label>
+            <select
+              [(ngModel)]="form.categorie"
+              name="categorie"
+              [class.input-error]="soumissionTentee && erreurs['categorie']"
+              class="form-select">
+              <option value="" disabled selected>Sélectionner une catégorie</option>
+              @for (cat of categories; track cat) {
+                <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
+            @if (soumissionTentee && erreurs['categorie']) {
+              <span class="error-msg">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                {{ erreurs['categorie'] }}
+              </span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>Localisation <span class="optional">(optionnel)</span></label>
+            <input
+              type="text"
+              [(ngModel)]="form.localisation"
+              name="localisation"
+              placeholder="Ex: Dakar, Sénégal"
+              class="form-input"/>
+          </div>
+        </div>
+
+        <!-- Résumé -->
+        <div class="form-group">
+          <label>Résumé court <span class="required">*</span></label>
+          <textarea
+            [(ngModel)]="form.resume"
+            name="resume"
+            placeholder="Une phrase d'accroche pour présenter votre projet..."
+            [class.input-error]="soumissionTentee && erreurs['resume']"
+            class="form-textarea"
+            rows="4">
+          </textarea>
+          @if (soumissionTentee && erreurs['resume']) {
+            <span class="error-msg">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ erreurs['resume'] }}
+            </span>
+          }
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button class="btn-annuler" (click)="annuler()">Annuler</button>
+        <button class="btn-brouillon" (click)="enregistrerBrouillon()">
+          Enregistrer comme brouillon
+        </button>
+        <button class="btn-soumettre" (click)="soumettre()">
+          Soumettre à validation
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

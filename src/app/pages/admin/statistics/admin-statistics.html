@@ -1,0 +1,48 @@
+<h2 class="page-title"><span class="title-dot"></span> Statistiques globales</h2>
+
+<section class="card">
+    <div class="section-title">Évolution des collectes</div>
+    <div class="line-chart" *ngIf="line().length > 0; else lineEmpty">
+        <div class="bar-wrap" *ngFor="let p of line()">
+            <div class="bar-col" [style.height.%]="(p.value / max(line())) * 100" [title]="p.label + ': ' + p.value">
+            </div>
+            <div class="bar-label">{{ p.label }}</div>
+        </div>
+    </div>
+    <ng-template #lineEmpty>
+        <div class="empty-text">Graphique indisponible — aucune donnée fournie par l'API</div>
+    </ng-template>
+</section>
+
+<section class="stats-grid">
+    <div class="card">
+        <div class="section-title">Campagnes par statut</div>
+        <div class="donut-wrap" *ngIf="donut().length > 0; else noDonut">
+            <div class="donut" [style.background]="donutStyle()"></div>
+            <div class="legend">
+                <div class="legend-item" *ngFor="let s of donut(); let i = index">
+                    <span class="dot"
+                        [style.background]="s.color ?? ['#16a34a','#f59e0b','#64748b','#ef4444'][i % 4]"></span>
+                    <span class="leg-label">{{ s.label }}</span>
+                    <span class="leg-val">{{ s.value }}</span>
+                </div>
+            </div>
+        </div>
+        <ng-template #noDonut>
+            <div class="empty-text">Aucune donnée de campagne</div>
+        </ng-template>
+    </div>
+
+    <div class="card">
+        <div class="section-title">Volume de transactions (6 mois)</div>
+        <div class="bar-chart" *ngIf="bars().length > 0; else noBars">
+            <div class="bar-wrap" *ngFor="let b of bars()">
+                <div class="bar-col" [style.height.%]="(b.value / max(bars())) * 100"></div>
+                <div class="bar-label">{{ b.label }}</div>
+            </div>
+        </div>
+        <ng-template #noBars>
+            <div class="empty-text">Aucune donnée de transaction</div>
+        </ng-template>
+    </div>
+</section>

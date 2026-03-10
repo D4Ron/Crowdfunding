@@ -1,0 +1,37 @@
+<h2 class="page-title"><span class="title-dot"></span> Transactions financières</h2>
+
+<div class="filters">
+    <input class="search-box" [value]="query()" (input)="query.set($any($event.target).value)"
+        placeholder="Rechercher une référence, contributeur, campagne..." />
+    <button class="btn btn-ghost" [disabled]="transactions().length === 0">⬇ Exporter CSV</button>
+</div>
+
+<div class="card" *ngIf="filtered().length > 0; else empty">
+    <div class="table-head">
+        <div>Référence</div>
+        <div>Contributeur</div>
+        <div>Campagne</div>
+        <div>Montant</div>
+        <div>Net reversé</div>
+        <div>Date</div>
+        <div>Statut</div>
+    </div>
+    <div class="table-row" *ngFor="let t of filtered()">
+        <div class="ref-cell">{{ t.referenceTransaction }}</div>
+        <div>{{ t.contributeurNom ?? '—' }}</div>
+        <div>{{ t.campaignTitre ?? '—' }}</div>
+        <div>{{ formatAmount(t.montant) }}</div>
+        <div>{{ formatAmount(t.montantNet) }}</div>
+        <div class="date-cell">{{ t.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+        <div>
+            <span class="status-badge" [ngClass]="statusClass(t.statut)">{{ statusLabel(t.statut) }}</span>
+        </div>
+    </div>
+</div>
+
+<ng-template #empty>
+    <div class="empty-card">
+        <div class="empty-title">Aucune transaction</div>
+        <div class="empty-text">Les transactions s'afficheront ici dès que l'API fournira les données.</div>
+    </div>
+</ng-template>

@@ -1,0 +1,101 @@
+<div class="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+
+  <div>
+    <h1 class="text-3xl font-bold text-slate-800">Bienvenue dans votre espace contributeur, Amara</h1>
+    <p class="text-slate-500 mt-1">Suivez vos contributions, consultez l'historique de vos paiements et découvrez
+      l'impact de votre soutien.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+      <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Montant total contribué</p>
+      <p class="text-2xl font-black text-slate-900">2 450 000 FCFA</p>
+      <p class="text-xs text-green-500 font-bold mt-2">↑ 12% ce mois</p>
+    </div>
+    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+      <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Campagnes soutenues</p>
+      <p class="text-2xl font-black text-slate-900">7</p>
+      <p class="text-xs text-amber-600 font-bold mt-2">2 nouvelles</p>
+    </div>
+    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+      <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Contributions en cours</p>
+      <p class="text-2xl font-black text-slate-900">3</p>
+      <p class="text-xs text-slate-400 font-bold mt-2">En attente de validation</p>
+    </div>
+    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+      <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Transactions réussies</p>
+      <p class="text-2xl font-black text-slate-900">12</p>
+      <p class="text-xs text-green-500 font-bold mt-2">100% de succès</p>
+    </div>
+  </div>
+
+  <section class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+    <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+      <h2 class="text-xl font-bold text-slate-800">Mes contributions récentes</h2>
+      <button routerLink="/contributeur/contributions" class="text-amber-600 text-sm font-bold hover:underline">Voir
+        tout </button>
+    </div>
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">
+          <th class="px-6 py-4">Campagne</th>
+          <th class="px-6 py-4">Montant</th>
+          <th class="px-6 py-4">Date</th>
+          <th class="px-6 py-4">Statut</th>
+          <th class="px-6 py-4">Référence</th>
+          <th class="px-6 py-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-50">
+        <tr *ngFor="let t of transactions" class="hover:bg-slate-50/50 transition-colors">
+          <td class="px-6 py-4 flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">
+              {{ t.campagne.charAt(0) }}</div>
+            <span class="text-sm font-bold text-slate-700">{{ t.campagne }}</span>
+          </td>
+          <td class="px-6 py-4 text-sm font-black text-slate-900">{{ t.montant | number }} FCFA</td>
+          <td class="px-6 py-4 text-xs text-slate-400 font-medium">{{ t.date }}</td>
+          <td class="px-6 py-4">
+            <span [class]="getStatusClass(t.statut)" class="px-3 py-1 rounded-full text-[9px] font-bold uppercase">{{
+              t.statut }}</span>
+          </td>
+          <td class="px-6 py-4 text-xs text-slate-400 font-mono">{{ t.reference }}</td>
+          <td class="px-6 py-4 text-amber-600 cursor-pointer"><i class="ph-file-pdf text-lg"></i></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2 class="text-xl font-bold text-slate-800 mb-6">Campagnes soutenues</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div *ngFor="let c of campagnes"
+        class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col group">
+        <div [style.background-color]="c.color" class="h-40 p-6 relative transition-transform group-hover:scale-[1.02]">
+          <span
+            class="bg-white/90 backdrop-blur text-[10px] font-black px-4 py-1.5 rounded-xl uppercase tracking-widest text-slate-800">
+            {{ c.categorie }}
+          </span>
+          <span *ngIf="c.financee"
+            class="absolute top-6 right-6 bg-green-500 text-white text-[9px] font-black px-3 py-1 rounded-full flex items-center gap-1">
+            ✓ FINANCÉE
+          </span>
+        </div>
+        <div class="p-8 flex flex-col flex-1">
+          <h3 class="text-xl font-bold text-slate-800 mb-3">{{ c.titre }}</h3>
+          <p class="text-slate-500 text-sm mb-8 line-clamp-2 leading-relaxed">{{ c.description }}</p>
+          <div class="bg-slate-50 p-5 rounded-2xl mb-8">
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Votre contribution</p>
+            <p class="text-xl font-black text-slate-900">{{ c.votreContribution | number }} FCFA</p>
+          </div>
+          <button
+            class="w-full py-4 border-2 border-slate-100 rounded-2xl text-sm font-black text-slate-600 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all">
+            Voir la campagne →
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>

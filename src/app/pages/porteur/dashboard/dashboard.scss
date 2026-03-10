@@ -1,0 +1,207 @@
+.dashboard {
+  padding: 28px;
+  background-color: #F7F7F2;
+  min-height: 100%;
+
+  .welcome-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    border: 1px solid #EEEEEA;
+    h1 { font-size: 22px; font-weight: 700; color: #0B1020; margin: 0 0 8px; }
+    p  { font-size: 14px; color: #6B7280; margin: 0; line-height: 1.6; max-width: 700px; }
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+
+    .kpi-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #EEEEEA;
+      border-left: 4px solid #C9A86A;
+
+      .kpi-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        .kpi-label { font-size: 13px; color: #6B7280; line-height: 1.4; }
+      }
+
+      .kpi-value {
+        font-size: 28px; font-weight: 700; color: #0B1020;
+        margin-bottom: 6px; line-height: 1.1;
+        &.large { font-size: 20px; }
+      }
+
+      .kpi-trend {
+        font-size: 12px; font-weight: 500;
+        &.positive { color: #1C4C39; }
+        &.neutral  { color: #9CA3AF; }
+      }
+    }
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .campaigns-section {
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;
+      h3 { font-size: 16px; font-weight: 600; color: #0B1020; margin: 0; }
+      .voir-tout { font-size: 13px; color: #C9A86A; text-decoration: none; font-weight: 500; }
+    }
+
+    .mes-campagnes-title { font-size: 20px; font-weight: 700; color: #0B1020; margin: 0 0 16px; }
+
+    .filters {
+      display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+      .filter-btn {
+        padding: 7px 16px; border-radius: 20px; border: 1px solid #E5E7EB;
+        background: #FFFFFF; font-size: 13px; color: #6B7280; cursor: pointer;
+        font-family: 'Inter', sans-serif; transition: all 0.2s;
+        &:hover { border-color: #C9A86A; color: #C9A86A; }
+        &.active { background: #0B1020; color: #FFFFFF; border-color: #0B1020; font-weight: 500; }
+      }
+    }
+
+    .campaign-card {
+      display: flex; background: #FFFFFF; border-radius: 12px;
+      overflow: hidden; margin-bottom: 16px; border: 1px solid #EEEEEA;
+      transition: box-shadow 0.2s;
+      &:hover { box-shadow: 0 4px 16px rgba(11,16,32,0.08); }
+
+      .campaign-img {
+        position: relative; width: 200px; flex-shrink: 0;
+        img { width: 100%; height: 100%; object-fit: cover; }
+
+        .badge-status {
+          position: absolute; top: 10px; left: 10px;
+          padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+          &.active   { background: #DCFCE7; color: #15803D; }
+          &.terminee { background: #F3F4F6; color: #374151; }
+          &.soumise  { background: #FEF3C7; color: #92400E; }
+          &.brouillon{ background: #EFF6FF; color: #1D4ED8; }
+        }
+
+        .badge-category {
+          position: absolute; top: 10px; right: 10px;
+          padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+          background: #0B1020; color: #C9A86A;
+        }
+      }
+
+      .campaign-body {
+        padding: 16px 20px; flex: 1;
+        h4 { font-size: 15px; font-weight: 600; color: #0B1020; margin: 0 0 6px; }
+        p  { font-size: 13px; color: #6B7280; margin: 0 0 12px; line-height: 1.5; }
+
+        .amounts {
+          display: flex; gap: 8px; margin-bottom: 8px; align-items: baseline;
+          .collected { font-size: 14px; font-weight: 700; color: #0B1020; }
+          .goal      { font-size: 12px; color: #9CA3AF; }
+        }
+
+        .progress-bar {
+          height: 6px; background: #F3F4F6; border-radius: 4px;
+          margin-bottom: 10px; overflow: hidden;
+          .progress-fill { height: 100%; background: #C9A86A; border-radius: 4px; }
+        }
+
+        .campaign-meta {
+          display: flex; gap: 16px; margin-bottom: 12px;
+          .meta-item { font-size: 12px; color: #6B7280; }
+        }
+
+        .campaign-actions {
+          display: flex; gap: 8px; justify-content: flex-end;
+          .action-btn {
+            width: 32px; height: 32px; border-radius: 8px;
+            border: 1px solid #E5E7EB; background: #FFFFFF;
+            cursor: pointer; font-size: 14px; transition: all 0.2s;
+            &:hover { border-color: #C9A86A; }
+            &.danger:hover { border-color: #EF4444; background: #FEF2F2; }
+          }
+        }
+      }
+    }
+
+    // ── État vide ─────────────────────────────
+    .empty-state {
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1px solid #EEEEEA;
+      padding: 60px 32px;
+      text-align: center;
+
+      .empty-icon {
+        width: 64px; height: 64px; border-radius: 50%;
+        background: #F3F4F6; color: #9CA3AF;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 20px;
+      }
+
+      h4 { font-size: 16px; font-weight: 600; color: #0B1020; margin: 0 0 10px; }
+      p  { font-size: 13px; color: #6B7280; line-height: 1.6; margin: 0 0 24px; }
+
+      .btn-creer {
+        padding: 12px 28px;
+        background: #C9A86A; color: #0B1020;
+        border: none; border-radius: 10px;
+        font-size: 14px; font-weight: 600;
+        cursor: pointer; font-family: 'Inter', sans-serif;
+        transition: background 0.2s;
+        &:hover { background: #b8954f; }
+      }
+    }
+  }
+
+  .activity-section {
+    background: #FFFFFF; border-radius: 12px;
+    padding: 20px; border: 1px solid #EEEEEA;
+    position: sticky; top: 88px;
+
+    h3 { font-size: 15px; font-weight: 600; color: #0B1020; margin: 0 0 16px; }
+
+    .activity-item {
+      display: flex; gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid #F3F4F6;
+      &:last-child { border-bottom: none; }
+
+      .activity-icon {
+        width: 32px; height: 32px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; font-size: 13px; font-weight: 700;
+        &.green  { background: #DCFCE7; color: #15803D; }
+        &.orange { background: #FEF3C7; color: #D97706; }
+        &.blue   { background: #DBEAFE; color: #2563EB; }
+        &.gray   { background: #F3F4F6; color: #6B7280; }
+        &.check  { background: #D1FAE5; color: #059669; }
+      }
+
+      .activity-content {
+        flex: 1;
+        .activity-time { font-size: 11px; color: #9CA3AF; display: block; margin-bottom: 3px; }
+        p { font-size: 12px; color: #374151; margin: 0 0 3px; line-height: 1.4; }
+        .activity-camp { font-size: 11px; color: #9CA3AF; }
+      }
+    }
+
+    .voir-activite {
+      width: 100%; margin-top: 12px; padding: 8px; background: none; border: none;
+      color: #C9A86A; font-size: 13px; font-weight: 500; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      &:hover { opacity: 0.75; }
+    }
+  }
+}

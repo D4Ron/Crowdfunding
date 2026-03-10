@@ -1,0 +1,19 @@
+.layout-container {
+  display: flex; 
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column; 
+  flex: 1; 
+  background-color: #f8f9fa; 
+}
+
+.content-area {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto; 
+}

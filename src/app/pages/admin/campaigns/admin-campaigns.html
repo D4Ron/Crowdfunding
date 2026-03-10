@@ -1,0 +1,54 @@
+<h2 class="page-title"><span class="title-dot"></span> Gestion des campagnes</h2>
+
+<div class="filters">
+    <input class="search-box" [value]="query()" (input)="query.set($any($event.target).value)"
+        placeholder="Rechercher par titre, porteur, catégorie..." />
+</div>
+
+<!-- Reject reason modal -->
+<div class="modal-overlay" *ngIf="rejectingId() !== null">
+    <div class="modal">
+        <div class="modal-title">Motif de rejet</div>
+        <textarea class="modal-input" rows="3" [value]="rejectReason()"
+            (input)="rejectReason.set($any($event.target).value)"
+            placeholder="Expliquer le motif de rejet..."></textarea>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" (click)="cancelReject()">Annuler</button>
+            <button class="btn btn-danger" (click)="confirmReject()" [disabled]="actionLoading() !== null">Confirmer le
+                rejet</button>
+        </div>
+    </div>
+</div>
+
+<div class="card" *ngIf="filtered().length > 0; else empty">
+    <div class="campaign-item" *ngFor="let c of filtered()">
+        <div class="camp-left">
+            <div class="camp-title">{{ c.titre }}</div>
+            <div class="camp-meta">{{ c.categorie }} · {{ c.porteurNom }}</div>
+            <div class="progress-wrap">
+                <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="percent(c)"></div>
+                </div>
+                <span class="progress-label">{{ percent(c) }}% · {{ c.montantCollecte | number }} / {{ c.objectifCfa |
+                    number }} FCFA</span>
+            </div>
+        </div>
+        <div class="camp-right">
+            <span class="status-badge" [ngClass]="statusClass(c.statut)">{{ statusLabel(c.statut) }}</span>
+            <span class="camp-date">{{ c.createdAt | date:'dd/MM/yyyy' }}</span>
+            <div class="action-btns">
+                <button class="btn btn-sm btn-success" (click)="validate(c.id)" [disabled]="actionLoading() === c.id"
+                    *ngIf="c.statut === 'EN_ATTENTE_VALIDATION'">✓ Valider</button>
+                <button class="btn btn-sm btn-danger" (click)="startReject(c.id)" [disabled]="actionLoading() === c.id"
+                    *ngIf="c.statut === 'EN_ATTENTE_VALIDATION'">✗ Rejeter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #empty>
+    <div class="empty-card">
+        <div class="empty-title">Aucune campagne</div>
+        <div class="empty-text">Les campagnes s'afficheront ici dès que l'API fournira les données.</div>
+    </div>
+</ng-template>

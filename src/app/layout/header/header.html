@@ -1,0 +1,34 @@
+<header class="navbar">
+  <div class="header-left">
+    <h1 class="page-title">Vue d'ensemble</h1>
+  </div>
+
+  <div class="header-center">
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Rechercher une campagne...">
+    </div>
+  </div>
+
+  <div class="header-right">
+    <button class="notif-btn">
+      <i class="fa-solid fa-bell"></i>
+      <span class="dot"></span>
+    </button>
+
+    <div class="user-profile">
+      <div class="user-info">
+        <span class="user-name">Amadou Diallo</span>
+        <span class="user-role">Porteur de projet</span>
+      </div>
+      <div class="user-avatar">AD</div>
+    </div>
+
+    <button class="btn-nouvelle" (click)="nouvelleCompagne()">
+  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+  </svg>
+  Nouvelle campagne
+</button>
+  </div>
+</header>

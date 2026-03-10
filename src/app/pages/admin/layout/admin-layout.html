@@ -1,0 +1,35 @@
+<div class="admin-layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo"></div>
+            <div class="brand-name">FoundTogo</div>
+        </div>
+        <div class="role-badge">ADMINISTRATEUR</div>
+        <nav class="nav">
+            <a *ngFor="let item of nav" class="nav-item" [routerLink]="item.path" routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: item.exact }">
+                <span class="nav-icon" [style.background]="item.icon"></span>
+                <span class="nav-label">{{ item.title }}</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-area">
+        <header class="topbar">
+            <div class="topbar-actions">
+                <input class="search-box" placeholder="Rechercher une campagne, un utilisateur..." />
+                <a routerLink="/admin/notifications" class="bell-btn" aria-label="Notifications">🔔</a>
+                <div class="user-chip">
+                    <div class="avatar-circle">{{ initials }}</div>
+                    <div class="user-info">
+                        <div class="user-name">{{ nom }}</div>
+                        <div class="user-role">{{ email }}</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="page-content">
+            <router-outlet></router-outlet>
+        </section>
+    </main>
+</div>

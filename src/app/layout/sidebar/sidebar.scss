@@ -1,0 +1,80 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: #0B1020; // Bleu nuit officiel 
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0;
+  box-sizing: border-box;
+
+  .brand {
+    padding: 0 20px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    margin-bottom: 30px; // Espace entre la ligne et le premier lien "Vue d'ensemble"
+
+    img { 
+      width: 120px; 
+      margin-bottom: 20px;
+    }
+
+    .role { 
+      color: #C9A86A; // Or champagne officiel 
+      font-size: 13px; // Taille augmentée pour la lisibilité
+      font-weight: 600; // Présence institutionnelle [cite: 26]
+      letter-spacing: 2px; // Espacement premium conforme à la maquette
+      text-transform: uppercase; // Majuscules obligatoires
+      margin-top: 5px; 
+      display: block;
+    }
+  }
+
+  .nav-links {
+    flex: 1;
+    display: flex;
+    flex-direction: column; 
+    gap: 5px;
+
+    a {
+      display: flex;
+      align-items: center;
+      padding: 15px 25px;
+      color: #b0b3b8;
+      text-decoration: none;
+      transition: 0.3s;
+      gap: 15px; 
+
+      i { font-size: 18px; width: 25px; } 
+
+      &:hover, &.active {
+        background-color: rgba(201, 168, 106, 0.1); // Fond or transparent
+        color: #C9A86A; // Texte or champagne
+        border-left: 4px solid #C9A86A; 
+      }
+    }
+  }
+
+  .footer-links {
+    margin-top: auto; // Pousse Aide et Déconnexion vers le bas
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 0;
+    
+    a, .logout-btn {
+      display: flex;
+      align-items: center;
+      padding: 12px 25px;
+      color: #b0b3b8;
+      text-decoration: none;
+      gap: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        color: #F7F7F2; // Blanc perle pour le survol 
+      }
+    }
+  }
+}

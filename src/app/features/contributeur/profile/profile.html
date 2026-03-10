@@ -1,0 +1,100 @@
+<div class="p-8 max-w-6xl mx-auto animate-in fade-in duration-500">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-800">Mon Profil</h1>
+    <p class="text-slate-500 mt-1">Gérez vos informations personnelles et vos préférences.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+    
+    <div class="space-y-6">
+      <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center">
+        <div class="w-24 h-24 bg-slate-900 rounded-full flex items-center justify-center text-white text-3xl font-black mx-auto mb-4 border-4 border-slate-50 shadow-inner">
+          AD
+        </div>
+        <h2 class="text-xl font-bold text-slate-800">Amara Diallo</h2>
+        <p class="text-slate-400 text-sm mb-4">amara.diallo@example.com</p>
+        <span class="inline-block px-4 py-1.5 bg-amber-50 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-widest border border-amber-100">
+          Contributeur
+        </span>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+        <div class="flex items-center gap-2 mb-4">
+          <i class="ph-shield-check text-amber-600 text-xl"></i>
+          <h3 class="font-bold text-slate-800">Sécurité du compte</h3>
+        </div>
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase">Mot de passe</p>
+            <p class="text-slate-800 font-medium">••••••••</p>
+          </div>
+        </div>
+        <button class="w-full py-3 border-2 border-slate-100 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all">
+          Modifier le mot de passe
+        </button>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+        <h3 class="text-lg font-bold text-slate-800 mb-6">Informations personnelles</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-slate-500 uppercase">Nom complet</label>
+            <div class="relative">
+              <i class="ph-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" value="Amara Diallo" class="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl text-slate-700 focus:ring-2 focus:ring-amber-500/20 font-medium">
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-slate-500 uppercase">Adresse email</label>
+            <div class="relative">
+              <i class="ph-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="email" value="amara.diallo@example.com" class="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl text-slate-700 focus:ring-2 focus:ring-amber-500/20 font-medium">
+            </div>
+          </div>
+          <div class="space-y-2 md:col-span-2">
+            <label class="text-xs font-bold text-slate-500 uppercase">Numéro de téléphone</label>
+            <div class="relative">
+              <i class="ph-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" value="+221 77 123 45 67" class="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-xl text-slate-700 focus:ring-2 focus:ring-amber-500/20 font-medium">
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <button class="px-8 py-3 bg-[#C49A5B] hover:bg-[#B3894A] text-white font-bold rounded-xl shadow-lg shadow-amber-900/10 transition-all">
+            Enregistrer les modifications
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+        <h3 class="text-lg font-bold text-slate-800 mb-6">Préférences</h3>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-2">
+            <div class="flex items-center gap-3">
+              <i class="ph-bell text-xl text-slate-400"></i>
+              <span class="text-sm font-bold text-slate-700">Mises à jour des campagnes soutenues</span>
+            </div>
+            <input type="checkbox" checked class="w-5 h-5 accent-amber-500">
+          </div>
+          <div class="flex items-center justify-between p-2">
+            <div class="flex items-center gap-3">
+              <i class="ph-receipt text-xl text-slate-400"></i>
+              <span class="text-sm font-bold text-slate-700">Reçus de paiement par email</span>
+            </div>
+            <input type="checkbox" checked class="w-5 h-5 accent-amber-500">
+          </div>
+          <div class="flex items-center justify-between p-2">
+            <div class="flex items-center gap-3">
+              <i class="ph-sparkle text-xl text-slate-400"></i>
+              <span class="text-sm font-bold text-slate-700">Nouvelles campagnes recommandées</span>
+            </div>
+            <input type="checkbox" class="w-5 h-5 accent-amber-500">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

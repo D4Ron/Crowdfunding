@@ -1,0 +1,67 @@
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="brand">
+                <div class="logo"></div>
+                <span class="brand-name">FoundTogo</span>
+            </div>
+            <h1>Créer un compte</h1>
+            <p>Rejoignez la communauté FoundTogo dès aujourd'hui.</p>
+        </div>
+
+        <form (submit)="onSubmit()" class="auth-form">
+            <div class="form-group">
+                <label for="nom">Nom complet</label>
+                <input type="text" id="nom" name="nom" [ngModel]="nom()" (ngModelChange)="nom.set($event)"
+                    placeholder="Jean Dupont" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Adresse email</label>
+                <input type="email" id="email" name="email" [ngModel]="email()" (ngModelChange)="email.set($event)"
+                    placeholder="votre@email.com" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" [ngModel]="password()"
+                        (ngModelChange)="password.set($event)" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" [ngModel]="confirmPassword()"
+                        (ngModelChange)="confirmPassword.set($event)" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Type de compte</label>
+                <div class="role-selection">
+                    <label class="role-option" [class.selected]="role() === 'CONTRIBUTEUR'">
+                        <input type="radio" name="role" value="CONTRIBUTEUR" (change)="role.set('CONTRIBUTEUR')"
+                            [checked]="role() === 'CONTRIBUTEUR'">
+                        <span>Contributeur</span>
+                    </label>
+                    <label class="role-option" [class.selected]="role() === 'PORTEUR_DE_PROJET'">
+                        <input type="radio" name="role" value="PORTEUR_DE_PROJET"
+                            (change)="role.set('PORTEUR_DE_PROJET')" [checked]="role() === 'PORTEUR_DE_PROJET'">
+                        <span>Porteur</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-error" *ngIf="error()">
+                {{ error() }}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" [disabled]="loading()">
+                {{ loading() ? 'Création en cours...' : 'S\'inscrire' }}
+            </button>
+
+            <div class="auth-footer">
+                Déjà un compte ? <a routerLink="/login">Connectez-vous</a>
+            </div>
+        </form>
+    </div>
+</div>

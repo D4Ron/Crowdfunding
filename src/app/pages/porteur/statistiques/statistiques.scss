@@ -1,0 +1,42 @@
+.stats-container {
+  padding: 30px;
+  background-color: #f9fafb;
+  min-height: 100vh;
+
+  .stats-header h1 {
+    font-size: 24px;
+    color: #0B1020;
+    margin-bottom: 30px;
+    font-weight: 700;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr; // La courbe prend plus de place
+  gap: 25px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stats-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+
+  h3 {
+    font-size: 16px;
+    color: #0B1020;
+    margin-bottom: 25px;
+    font-weight: 600;
+  }
+
+  .chart-wrapper {
+    height: 300px;
+    position: relative;
+  }
+}

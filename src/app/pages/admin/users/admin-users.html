@@ -1,0 +1,50 @@
+<h2 class="page-title"><span class="title-dot"></span> Gestion des utilisateurs</h2>
+
+<div class="filters">
+    <input class="search-box" [value]="query()" (input)="query.set($any($event.target).value)"
+        placeholder="Rechercher par nom ou email..." />
+    <select class="role-select" [value]="roleFilter()" (change)="roleFilter.set($any($event.target).value)">
+        <option value="all">Tous les rôles</option>
+        <option value="PORTEUR_DE_PROJET">Porteurs</option>
+        <option value="CONTRIBUTEUR">Contributeurs</option>
+    </select>
+</div>
+
+<div class="card" *ngIf="filtered().length > 0; else empty">
+    <div class="table-head">
+        <div>Utilisateur</div>
+        <div>Rôle</div>
+        <div>Statut</div>
+        <div>Inscription</div>
+        <div>Actions</div>
+    </div>
+    <div class="table-row" *ngFor="let u of filtered()">
+        <div class="user-cell">
+            <div class="user-avatar">{{ initials(u.nom) }}</div>
+            <div class="user-info">
+                <div class="user-name">{{ u.nom }}</div>
+                <div class="user-email">{{ u.email }}</div>
+            </div>
+        </div>
+        <div>{{ roleLabel(u.role) }}</div>
+        <div>
+            <span class="status-badge" [ngClass]="statusClass(u)">{{ statusLabel(u) }}</span>
+        </div>
+        <div class="date-cell">{{ u.createdAt | date:'dd/MM/yyyy' }}</div>
+        <div class="action-btns">
+            <button class="btn btn-sm btn-ghost" (click)="reactivate(u.id)" [disabled]="actionLoading() === u.id"
+                *ngIf="!u.actif && !u.banni">Réactiver</button>
+            <button class="btn btn-sm btn-warn" (click)="suspend(u.id)" [disabled]="actionLoading() === u.id"
+                *ngIf="u.actif && !u.banni">Suspendre</button>
+            <button class="btn btn-sm btn-danger" (click)="ban(u.id)" [disabled]="actionLoading() === u.id"
+                *ngIf="!u.banni">Bannir</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #empty>
+    <div class="empty-card">
+        <div class="empty-title">Aucun utilisateur</div>
+        <div class="empty-text">Les utilisateurs s'afficheront ici dès que l'API fournira les données.</div>
+    </div>
+</ng-template>

@@ -1,0 +1,48 @@
+@use '../login/login' as *;
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.role-selection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.role-option {
+    position: relative;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s;
+
+    input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    &:hover {
+        background: #f8fafc;
+    }
+
+    &.selected {
+        border-color: #d6b256;
+        background: rgba(214, 178, 86, 0.05);
+        color: #0f172a;
+        box-shadow: 0 0 0 1px #d6b256;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}

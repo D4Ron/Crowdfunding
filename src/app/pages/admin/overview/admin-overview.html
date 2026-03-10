@@ -1,0 +1,58 @@
+<section class="hero">
+    <div class="hero-card">
+        <h1>Tableau de pilotage administratif</h1>
+        <p>Cet espace permet la supervision de la plateforme, la validation des campagnes, la gestion des utilisateurs
+            et le suivi de l'activité globale.</p>
+        <div class="loading-indicator" *ngIf="loading()">Chargement des données...</div>
+    </div>
+</section>
+
+<section class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-label">Campagnes actives</span>
+            <span class="kpi-badge trend-up">+12% ce mois</span>
+        </div>
+        <div class="kpi-value">{{ stats().activeCampaigns ?? '—' }}</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-label">Utilisateurs inscrits</span>
+            <span class="kpi-badge trend-up">+156 cette semaine</span>
+        </div>
+        <div class="kpi-value">{{ stats().registeredUsers ?? '—' }}</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-label">Montant total collecté</span>
+            <span class="kpi-badge trend-up">ce mois</span>
+        </div>
+        <div class="kpi-value kpi-value--small">{{ formatAmount(stats().totalCollected) }}</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-label">Transactions du jour</span>
+            <span class="kpi-badge trend-neutral">Stable</span>
+        </div>
+        <div class="kpi-value">{{ stats().todayTransactions ?? '—' }}</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-label">Campagnes en attente</span>
+            <span class="kpi-badge trend-warn">À traiter</span>
+        </div>
+        <div class="kpi-value">{{ stats().pendingCampaigns ?? '—' }}</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-label">Commission actuelle</span>
+            <span class="kpi-badge trend-neutral">Taux plateforme</span>
+        </div>
+        <div class="kpi-value">{{ stats().currentCommission !== null ? (stats().currentCommission + '%') : '—' }}</div>
+    </div>
+</section>
