@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { CampaignResponse } from '../../models/campaign.model';
 import { ContributionResponse } from '../../models/contribution.model';
 import { User } from '../../models/user.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
 
-  private apiUrl = 'http://localhost:8080/api/admin';
+  private apiUrl = `${environment.apiUrl}/api/admin`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Campaigns
   getPendingCampaigns(): Observable<CampaignResponse[]> {

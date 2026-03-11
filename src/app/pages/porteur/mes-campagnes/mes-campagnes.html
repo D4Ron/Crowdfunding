@@ -1,126 +1,103 @@
 <div class="mes-campagnes">
 
-  <div class="page-header">
-    <h2>Mes campagnes</h2>
-    <div class="filters">
-      @for (filter of filters; track filter) {
-      <button class="filter-btn" [class.active]="activeFilter() === filter" (click)="setFilter(filter)">
-        {{ filter }}
-      </button>
-      }
+  <div class="header">
+    <div class="header-content">
+      <h1>Mes campagnes</h1>
+      <p>Retrouvez et gérez l'ensemble de vos projets de levée de fonds.</p>
     </div>
+    <button class="btn-creer" routerLink="/porteur/creer-campagne">
+      <span class="plus-icon">+</span> Lancer un nouveau projet
+    </button>
   </div>
 
-  <div class="campaigns-list">
-    @if (filteredCampaigns().length > 0) {
+  @if (loading) {
+  <div style="text-align:center;padding:60px">
+    <div
+      style="display:inline-block;width:40px;height:40px;border:4px solid #E5E7EB;border-top-color:#C9A86A;border-radius:50%;animation:spin 0.8s linear infinite">
+    </div>
+  </div>
+  }
+
+  @if (!loading) {
+  <div class="filters">
+    @for (filter of filters; track filter) {
+    <button class="filter-btn" [class.active]="activeFilter() === filter" (click)="setFilter(filter)">
+      {{ filter }}
+    </button>
+    }
+  </div>
+
+  @if (filteredCampaigns().length > 0) {
+  <div class="campaigns-grid">
     @for (c of filteredCampaigns(); track c.id) {
     <div class="campaign-card">
-
-      <!-- Image -->
       <div class="campaign-img">
         @if (c.imageUrl) {
-        <img [src]="c.imageUrl" [alt]="c.title" />
+        <img [src]="c.imageUrl" [alt]="c.titre" />
         } @else {
-        <div class="img-placeholder">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="32" height="32">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-              d="M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2 1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" />
-          </svg>
+        <div
+          style="width:100%;height:100%;background:#F3F4F6;display:flex;align-items:center;justify-content:center;color:#D1D5DB">
+          Pas d'image
         </div>
         }
-        <span class="badge-status" [ngClass]="c.status">{{ c.statusLabel }}</span>
-        <span class="badge-category">{{ c.category }}</span>
+        <span class="badge-status" [ngClass]="statutClass(c.statut)">{{ statutLabel(c.statut) }}</span>
+        <span class="badge-category">{{ c.categorie }}</span>
       </div>
-
-      <!-- Corps -->
       <div class="campaign-body">
-        <h3>{{ c.title }}</h3>
-        <p>{{ c.description }}</p>
+        <div class="title-row">
+          <h3>{{ c.titre }}</h3>
+        </div>
+        <p class="description">{{ c.description }}</p>
 
         <div class="amounts">
-          <span class="collected">{{ c.collected }} F CFA</span>
-          <span class="goal">sur {{ c.goal }} F CFA</span>
+          <div class="amount-item">
+            <span class="label">Collecté</span>
+            <span class="value">{{ c.montantCollecte | number }} F CFA</span>
+          </div>
+          <div class="amount-item goal">
+            <span class="label">Objectif</span>
+            <span class="value">{{ c.objectifCfa | number }} F CFA</span>
+          </div>
         </div>
 
-        <div class="progress-bar">
-          <div class="progress-fill" [style.width.%]="c.progress" [class.full]="c.progress === 100"></div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="c.pourcentageAtteint"></div>
+          </div>
+          <span class="percent">{{ c.pourcentageAtteint }}%</span>
         </div>
 
-        <div class="campaign-meta">
-          <span class="meta-item">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13">
-              <circle cx="12" cy="12" r="10" stroke-width="2" />
-              <path stroke-linecap="round" stroke-width="2" d="M12 8v4l3 3" />
-            </svg>
-            {{ c.progress }}%
-          </span>
-          <span class="meta-item">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 20h5v-2a4 4 0 0 0-5-3.87M9 20H4v-2a4 4 0 0 1 5-3.87m3-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zm6 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
-            </svg>
-            {{ c.contributors }} contributeurs
-          </span>
-          <span class="meta-item">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="13" height="13">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4l3 3m9-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
-            </svg>
-            {{ c.daysLeft }} jours restants
-          </span>
+        <div class="meta">
+          <div class="meta-item">
+            <span class="icon">👥</span>
+            <span class="text">{{ c.nombreContributeurs }} contributeurs</span>
+          </div>
+          <div class="meta-item">
+            <span class="icon">📅</span>
+            <span class="text">{{ c.joursRestants }} jours restants</span>
+          </div>
         </div>
 
-        <!-- Actions -->
-        <div class="campaign-actions">
-          <button class="action-btn" title="Voir">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-          </button>
-          <button class="action-btn" title="Modifier">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-          </button>
-          @if (c.canSubmit) {
-          <button class="action-btn submit-btn" title="Soumettre">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-            Soumettre
-          </button>
+        <div class="actions">
+          <button class="action-btn view" title="Voir les détails" [routerLink]="['/campaigns', c.id]">Voir</button>
+          <button class="action-btn edit" title="Modifier"
+            [routerLink]="['/porteur/modifier-campagne', c.id]">Modifier</button>
+          @if (canSubmit(c.statut)) {
+          <button class="action-btn submit" title="Soumettre pour validation" (click)="submit(c.id)">Soumettre</button>
           }
-          <button class="action-btn danger" title="Supprimer">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="15" height="15">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16" />
-            </svg>
-          </button>
+          <button class="action-btn delete" title="Supprimer" (click)="delete(c.id)">Supprimer</button>
         </div>
       </div>
-
-    </div>
-    }
-    } @else {
-    <div class="empty-state">
-      <div class="empty-icon">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="32" height="32">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-            d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
-        </svg>
-      </div>
-      <h4>Aucune campagne trouvée</h4>
-      <p>Vous n'avez aucune campagne correspondant à ce filtre.</p>
-      <button class="btn-creer" routerLink="/porteur/creer-campagne">
-        + Créer ma première campagne
-      </button>
     </div>
     }
   </div>
-
+  } @else {
+  <div class="empty-state">
+    <div class="empty-icon">📂</div>
+    <h3>Aucune campagne trouvée</h3>
+    <p>Il semblerai que vous n'ayez aucun projet dans cette catégorie actuellement.</p>
+    <button class="btn-creer" routerLink="/porteur/creer-campagne">+ Créer ma première campagne</button>
+  </div>
+  }
+  }
 </div>

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CampaignRequest, CampaignResponse } from '../../models/campaign.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CampaignService {
 
-  private apiUrl = 'http://localhost:8080/api/campaigns';
+  private apiUrl = `${environment.apiUrl}/api/campaigns`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Public
   getActiveCampaigns(): Observable<CampaignResponse[]> {

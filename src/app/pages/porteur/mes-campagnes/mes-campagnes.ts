@@ -1,126 +1,89 @@
-import { Component, signal, computed } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, OnInit, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-interface Campaign {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-  category: string;
-  status: 'active' | 'brouillon' | 'soumise' | 'terminee';
-  statusLabel: string;
-  collected: string;
-  goal: string;
-  progress: number;
-  contributors: number;
-  daysLeft: number;
-  canSubmit: boolean;
-}
+import { CampaignService } from '../../../core/services/campaign.service';
+import { CampaignResponse } from '../../../models/campaign.model';
 
 @Component({
   selector: 'app-mes-campagnes',
   standalone: true,
-  imports: [NgClass, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './mes-campagnes.html',
   styleUrl: './mes-campagnes.scss'
 })
-export class MesCampagnesComponent {
+export class MesCampagnesComponent implements OnInit {
 
   filters = ['Toutes', 'Actives', 'Brouillons', 'Soumises', 'Terminées'];
   activeFilter = signal('Toutes');
+  campaigns: CampaignResponse[] = [];
+  loading = true;
+  error = '';
 
-  campaigns: Campaign[] = [
-    {
-      id: 1,
-      title: 'Ferme Solaire de Ouagadougou',
-      description: 'Installation de panneaux solaires pour alimenter 500 foyers dans la région de Ouagadougou.',
-      imageUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=300&fit=crop',
-      category: 'Énergie',
-      status: 'active',
-      statusLabel: 'Active',
-      collected: '8 750 000',
-      goal: '15 000 000',
-      progress: 58,
-      contributors: 142,
-      daysLeft: 0,
-      canSubmit: false
-    },
-    {
-      id: 2,
-      title: 'École Numérique de Dakar',
-      description: 'Équipement informatique et formation pour une école primaire à Dakar.',
-      imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop',
-      category: 'Éducation',
-      status: 'terminee',
-      statusLabel: 'Terminée',
-      collected: '5 000 000',
-      goal: '5 000 000',
-      progress: 100,
-      contributors: 89,
-      daysLeft: 0,
-      canSubmit: false
-    },
-    {
-      id: 3,
-      title: 'Clinique Mobile du Sahel',
-      description: 'Une clinique mobile pour offrir des soins de santé dans les zones reculées.',
-      imageUrl: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=300&fit=crop',
-      category: 'Santé',
-      status: 'soumise',
-      statusLabel: 'En attente',
-      collected: '1 250 000',
-      goal: '25 000 000',
-      progress: 5,
-      contributors: 34,
-      daysLeft: 0,
-      canSubmit: false
-    },
-    {
+  constructor(private campaignService: CampaignService) { }
 
-      id: 4,
-      title: 'Marché Artisanal de Cotonou',
-      description: 'Construction d\'un espace moderne pour les artisans locaux.',
-      imageUrl: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=300&fit=crop',
-      category: 'Artisanat',
-      status: 'brouillon',
-      statusLabel: 'Brouillon',
-      collected: '0',
-      goal: '8 000 000',
-      progress: 0,
-      contributors: 0,
-      daysLeft: 0,
-      canSubmit: true
-    },
-
-    {
-      id: 5,
-      title: 'Tech Hub Abidjan',
-      description: 'Incubateur pour les jeunes startups technologiques ivoiriennes.',
-      imageUrl: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=300&fit=crop',
-      category: 'Technologie',
-      status: 'active',
-      statusLabel: 'Active',
-      collected: '18 500 000',
-      goal: '30 000 000',
-      progress: 62,
-      contributors: 215,
-      daysLeft: 0,
-      canSubmit: false
-    }
-  ];
+  ngOnInit(): void {
+    this.campaignService.getMyCampaigns().subscribe({
+      next: (data) => {
+        this.campaigns = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Impossible de charger vos campagnes.';
+        this.loading = false;
+      }
+    });
+  }
 
   filteredCampaigns = computed(() => {
     const filter = this.activeFilter();
     if (filter === 'Toutes') return this.campaigns;
-    if (filter === 'Actives') return this.campaigns.filter(c => c.status === 'active');
-    if (filter === 'Brouillons') return this.campaigns.filter(c => c.status === 'brouillon');
-    if (filter === 'Soumises') return this.campaigns.filter(c => c.status === 'soumise');
-    if (filter === 'Terminées') return this.campaigns.filter(c => c.status === 'terminee');
+    if (filter === 'Actives') return this.campaigns.filter(c => c.statut === 'ACTIVE');
+    if (filter === 'Brouillons') return this.campaigns.filter(c => c.statut === 'BROUILLON');
+    if (filter === 'Soumises') return this.campaigns.filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
+    if (filter === 'Terminées') return this.campaigns.filter(c => c.statut === 'FINANCEE' || c.statut === 'EXPIREE');
     return this.campaigns;
   });
 
   setFilter(filter: string) {
     this.activeFilter.set(filter);
+  }
+
+  statutLabel(statut: string): string {
+    const map: Record<string, string> = {
+      ACTIVE: 'Active', BROUILLON: 'Brouillon',
+      EN_ATTENTE_VALIDATION: 'En attente',
+      FINANCEE: 'Financée', EXPIREE: 'Expirée', REJETEE: 'Rejetée'
+    };
+    return map[statut] ?? statut;
+  }
+
+  statutClass(statut: string): string {
+    const map: Record<string, string> = {
+      ACTIVE: 'active', BROUILLON: 'brouillon',
+      EN_ATTENTE_VALIDATION: 'soumise',
+      FINANCEE: 'active', EXPIREE: 'terminee', REJETEE: 'terminee'
+    };
+    return map[statut] ?? '';
+  }
+
+  canSubmit(statut: string): boolean {
+    return statut === 'BROUILLON';
+  }
+
+  submit(id: number): void {
+    this.campaignService.submitForValidation(id).subscribe({
+      next: (updated) => {
+        this.campaigns = this.campaigns.map(c => c.id === id ? updated : c);
+      },
+      error: () => alert('Erreur lors de la soumission.')
+    });
+  }
+
+  delete(id: number): void {
+    if (!confirm('Supprimer cette campagne ?')) return;
+    this.campaignService.deleteCampaign(id).subscribe({
+      next: () => { this.campaigns = this.campaigns.filter(c => c.id !== id); },
+      error: () => alert('Erreur lors de la suppression.')
+    });
   }
 }

@@ -34,6 +34,8 @@ import { AdminLogout } from './pages/admin/logout/admin-logout';
 // Auth Components
 import { LoginComponent } from './pages/auth/login/login';
 import { RegisterComponent } from './pages/auth/register/register';
+import { AideSupport } from './pages/porteur/aide-support/aide-support';
+import { ContributeurLayout } from './layout/contributeur-layout/contributeur-layout';
 
 // Guards
 import { AdminGuard } from './core/guards/admin.guard';
@@ -74,6 +76,7 @@ const routes: Routes = [
       { path: 'statistiques', component: Statistiques },
       { path: 'notifications', component: PorteurNotifications },
       { path: 'parametres', component: Parametres },
+      { path: 'aide', component: AideSupport },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -82,6 +85,7 @@ const routes: Routes = [
   // NOTE: campaign list & detail are accessible without login (public browsing)
   {
     path: 'contributeur',
+    component: ContributeurLayout,
     canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: ContributeurDashboard },

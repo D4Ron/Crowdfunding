@@ -1,90 +1,83 @@
-import { Component, signal, computed } from '@angular/core';
-import { NgClass, NgIf } from '@angular/common';
+import { Component, OnInit, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-interface Campaign {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-  category: string;
-  status: 'active' | 'brouillon' | 'soumise' | 'terminee';
-  statusLabel: string;
-  collected: string;
-  goal: string;
-  progress: number;
-  contributors: number;
-  daysLeft: number;
-}
+import { CampaignService } from '../../../core/services/campaign.service';
+import { CampaignResponse } from '../../../models/campaign.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgClass, RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
-  filters = ['Toutes', 'Actives', 'Brouillons', 'Soumises', 'Terminées'];
+  filters = ['Toutes', 'Actives', 'Brouillons', 'Soumises'];
   activeFilter = signal('Toutes');
+  campaigns: CampaignResponse[] = [];
+  loading = true;
+  error = '';
 
-  campaigns: Campaign[] = [
-    {
-      id: 1,
-      title: 'Ferme Solaire de Ouagadougou',
-      description: 'Installation de panneaux solaires pour alimenter 500 foyers dans la région de Ouagadougou.',
-      imageUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=300&h=180&fit=crop',
-      category: 'Énergie',
-      status: 'active',
-      statusLabel: 'Active',
-      collected: '8 750 000',
-      goal: '15 000 000',
-      progress: 58,
-      contributors: 142,
-      daysLeft: 0
-    },
-    {
-      id: 2,
-      title: 'École Numérique de Dakar',
-      description: 'Équipement informatique et formation pour une école primaire à Dakar.',
-      imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&h=180&fit=crop',
-      category: 'Éducation',
-      status: 'terminee',
-      statusLabel: 'Terminée',
-      collected: '5 000 000',
-      goal: '5 000 000',
-      progress: 100,
-      contributors: 89,
-      daysLeft: 0
-    },
-    {
-      id: 3,
-      title: 'Clinique Mobile du Sahel',
-      description: 'Une clinique mobile pour offrir des soins de santé dans les zones reculées.',
-      imageUrl: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=300&h=180&fit=crop',
-      category: 'Santé',
-      status: 'soumise',
-      statusLabel: 'En attente',
-      collected: '1 250 000',
-      goal: '25 000 000',
-      progress: 5,
-      contributors: 34,
-      daysLeft: 0
-    }
-  ];
+  // KPI signals
+  totalCollecte = signal(0);
+  totalContributeurs = signal(0);
+  campagnesActives = signal(0);
+  campagnesBrouillon = signal(0);
+
+  constructor(private campaignService: CampaignService) { }
+
+  ngOnInit(): void {
+    this.campaignService.getMyCampaigns().subscribe({
+      next: (data) => {
+        this.campaigns = data;
+        this.campagnesActives.set(data.filter(c => c.statut === 'ACTIVE').length);
+        this.campagnesBrouillon.set(data.filter(c => c.statut === 'BROUILLON').length);
+        this.totalCollecte.set(data.reduce((sum, c) => sum + c.montantCollecte, 0));
+        this.totalContributeurs.set(data.reduce((sum, c) => sum + c.nombreContributeurs, 0));
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'Impossible de charger vos campagnes.';
+        this.loading = false;
+      }
+    });
+  }
 
   filteredCampaigns = computed(() => {
     const filter = this.activeFilter();
     if (filter === 'Toutes') return this.campaigns;
-    if (filter === 'Actives') return this.campaigns.filter(c => c.status === 'active');
-    if (filter === 'Brouillons') return this.campaigns.filter(c => c.status === 'brouillon');
-    if (filter === 'Soumises') return this.campaigns.filter(c => c.status === 'soumise');
-    if (filter === 'Terminées') return this.campaigns.filter(c => c.status === 'terminee');
+    if (filter === 'Actives') return this.campaigns.filter(c => c.statut === 'ACTIVE');
+    if (filter === 'Brouillons') return this.campaigns.filter(c => c.statut === 'BROUILLON');
+    if (filter === 'Soumises') return this.campaigns.filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
     return this.campaigns;
   });
 
   setFilter(filter: string) {
     this.activeFilter.set(filter);
+  }
+
+  statutLabel(statut: string): string {
+    const map: Record<string, string> = {
+      ACTIVE: 'Active',
+      BROUILLON: 'Brouillon',
+      EN_ATTENTE_VALIDATION: 'En attente',
+      FINANCEE: 'Financée',
+      EXPIREE: 'Expirée',
+      REJETEE: 'Rejetée'
+    };
+    return map[statut] ?? statut;
+  }
+
+  statutClass(statut: string): string {
+    const map: Record<string, string> = {
+      ACTIVE: 'active',
+      BROUILLON: 'brouillon',
+      EN_ATTENTE_VALIDATION: 'soumise',
+      FINANCEE: 'active',
+      EXPIREE: 'terminee',
+      REJETEE: 'terminee'
+    };
+    return map[statut] ?? '';
   }
 }
