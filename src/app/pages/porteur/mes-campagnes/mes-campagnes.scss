@@ -77,8 +77,9 @@
 
       .badge-status {
         position: absolute; top: 12px; left: 12px;
-        padding: 4px 12px; border-radius: 20px;
-        font-size: 11px; font-weight: 600;
+        padding: 4px 10px; border-radius: 20px;
+        font-size: 10px; font-weight: 700;
+        text-transform: uppercase;
         &.active    { background: #DCFCE7; color: #15803D; }
         &.terminee  { background: #1a1a2e; color: #FFFFFF; }
         &.soumise   { background: #FEF3C7; color: #92400E; }
@@ -87,8 +88,9 @@
 
       .badge-category {
         position: absolute; top: 12px; right: 12px;
-        padding: 4px 12px; border-radius: 20px;
-        font-size: 11px; font-weight: 600;
+        padding: 4px 10px; border-radius: 20px;
+        font-size: 10px; font-weight: 700;
+        text-transform: uppercase;
         background: #0B1020; color: #C9A86A;
       }
     }

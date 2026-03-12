@@ -42,6 +42,9 @@ export class Statistiques implements OnInit, AfterViewInit {
   }
 
   renderLineChart(): void {
+    const canvas = document.getElementById('lineChart');
+    if (!canvas) return;
+
     const existing = Chart.getChart('lineChart');
     if (existing) existing.destroy();
     const daily = this.dashboardData?.dailyCollections ?? {};
@@ -65,6 +68,9 @@ export class Statistiques implements OnInit, AfterViewInit {
   }
 
   renderBarChart(): void {
+    const canvas = document.getElementById('barChart');
+    if (!canvas) return;
+
     const existing = Chart.getChart('barChart');
     if (existing) existing.destroy();
     const statusLabels = ['ACTIVE', 'BROUILLON', 'EN_ATTENTE_VALIDATION', 'FINANCEE', 'EXPIREE', 'REJETEE'];

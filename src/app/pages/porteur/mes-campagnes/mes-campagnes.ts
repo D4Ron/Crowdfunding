@@ -41,7 +41,7 @@ export class MesCampagnesComponent implements OnInit {
     if (filter === 'Actives') return list.filter(c => c.statut === 'ACTIVE');
     if (filter === 'Brouillons') return list.filter(c => c.statut === 'BROUILLON');
     if (filter === 'Soumises') return list.filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
-    if (filter === 'Terminées') return list.filter(c => c.statut === 'FINANCEE' || c.statut === 'EXPIREE');
+    if (filter === 'Terminées') return list.filter(c => c.statut === 'FINANCEE' || c.statut === 'EXPIREE' || c.statut === 'REJETEE');
     return list;
   });
 

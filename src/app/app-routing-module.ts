@@ -81,18 +81,17 @@ const routes: Routes = [
     ]
   },
 
-  // Contributeur Routes (protected: logged in)
+  // Contributeur Routes
   // NOTE: campaign list & detail are accessible without login (public browsing)
   {
     path: 'contributeur',
     component: ContributeurLayout,
-    canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: ContributeurDashboard },
-      { path: 'transactions', component: TransactionHistory },
-      { path: 'contributions', component: ContributionsComponent },
-      { path: 'notifications', component: ContributeurNotifications },
-      { path: 'profile', component: Profile },
+      { path: 'dashboard', component: ContributeurDashboard, canActivate: [AuthGuard] },
+      { path: 'transactions', component: TransactionHistory, canActivate: [AuthGuard] },
+      { path: 'contributions', component: ContributionsComponent, canActivate: [AuthGuard] },
+      { path: 'notifications', component: ContributeurNotifications, canActivate: [AuthGuard] },
+      { path: 'profile', component: Profile, canActivate: [AuthGuard] },
       { path: 'campaigns', component: CampaignListComponent },
       { path: 'campaigns/:id', component: CampaignDetail },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }

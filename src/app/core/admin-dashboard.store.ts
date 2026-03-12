@@ -87,10 +87,16 @@ export class AdminDashboardStore {
                     totalCollected: data.totalCollected ?? data.totalCollecte ?? null,
                     todayTransactions: data.todayTransactions ?? data.transactionsJour ?? null,
                     pendingCampaigns: data.pendingCampaigns ?? data.campagnesEnAttente ?? null,
-                    currentCommission: data.currentCommission ?? data.commissionActuelle ?? null,
+                    currentCommission: null, // Will be overridden by the specific fetch below
                 });
             },
             error: () => this.error.set('Impossible de charger les statistiques')
+        });
+
+        // Load commission
+        this.adminService.getCommissionRate().subscribe({
+            next: (data) => this.stats.update(prev => ({ ...prev, currentCommission: data.currentCommission })),
+            error: () => console.error('Impossible de charger le taux de commission')
         });
 
         // Load campaigns

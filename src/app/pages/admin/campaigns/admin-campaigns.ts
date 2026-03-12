@@ -16,7 +16,9 @@ export class AdminCampaigns implements OnInit {
     private store = inject(AdminDashboardStore);
     private adminService = inject(AdminService);
 
-    readonly campaigns = computed(() => this.store.campaigns());
+    readonly storeCampaigns = computed(() => this.store.campaigns());
+    // Local state for campaigns shown in this view (pending specifically)
+    readonly campaigns = signal<CampaignResponse[]>([]);
     readonly query = signal('');
     readonly actionLoading = signal<number | null>(null);
     readonly rejectReason = signal('');
@@ -24,17 +26,35 @@ export class AdminCampaigns implements OnInit {
 
     ngOnInit(): void {
         this.store.loadAll();
+        // explicit fetch for pending
+        this.loadPending();
+    }
+
+    loadPending(): void {
+        this.adminService.getPendingCampaigns().subscribe({
+            next: (list) => {
+                this.campaigns.set(list);
+            },
+            error: (err) => console.error('Failed to load pending campaigns', err)
+        });
     }
 
     filtered() {
         const q = this.query().toLowerCase();
+        let list = this.campaigns();
+        
+        // Also fallback to store campaigns if local list is empty, filtering for pending locally
+        if (list.length === 0) {
+            list = this.storeCampaigns().filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
+        }
+
         return q
-            ? this.campaigns().filter(c =>
+            ? list.filter(c =>
                 c.titre.toLowerCase().includes(q) ||
                 c.porteurNom.toLowerCase().includes(q) ||
                 c.categorie.toLowerCase().includes(q)
             )
-            : this.campaigns();
+            : list;
     }
 
     percent(c: CampaignResponse): number {
@@ -71,6 +91,8 @@ export class AdminCampaigns implements OnInit {
         this.adminService.validateCampaign(id).subscribe({
             next: (updated) => {
                 this.store.updateCampaign(updated);
+                // remove from local pending list
+                this.campaigns.update(list => list.filter(c => c.id !== id));
                 this.actionLoading.set(null);
             },
             error: () => this.actionLoading.set(null)
@@ -89,6 +111,8 @@ export class AdminCampaigns implements OnInit {
         this.adminService.rejectCampaign(id, this.rejectReason() || 'Non conforme').subscribe({
             next: (updated) => {
                 this.store.updateCampaign(updated);
+                // remove from local pending list
+                this.campaigns.update(list => list.filter(c => c.id !== id));
                 this.actionLoading.set(null);
                 this.rejectingId.set(null);
             },

@@ -50,7 +50,13 @@ export class RegisterComponent {
             },
             error: (err) => {
                 this.loading.set(false);
-                this.error.set('Erreur lors de l\'inscription. Veuillez réessayer.');
+                let msg = 'Erreur lors de l\'inscription. Veuillez réessayer.';
+                if (err?.error?.message) {
+                    msg = err.error.message;
+                } else if (err?.error?.errors && Array.isArray(err.error.errors)) {
+                    msg = err.error.errors.join(', ');
+                }
+                this.error.set(msg);
             }
         });
     }

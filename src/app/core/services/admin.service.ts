@@ -55,6 +55,10 @@ export class AdminService {
   }
 
   // Commission
+  getCommissionRate(): Observable<{ currentCommission: number }> {
+    return this.http.get<{ currentCommission: number }>(`${this.apiUrl}/commission`);
+  }
+
   updateCommission(rate: number): Observable<{ message: string }> {
     return this.http.patch<{ message: string }>(
       `${this.apiUrl}/commission?rate=${rate}`, {});
