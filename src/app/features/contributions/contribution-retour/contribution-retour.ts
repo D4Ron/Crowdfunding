@@ -60,8 +60,7 @@ export class ContributionRetourComponent implements OnInit {
       } else if (statusParam === 'canceled' || statusParam === 'declined') {
         this.status = 'canceled';
       } else {
-        // Default to success if no explicit fail (custom FedaPay flow)
-        this.status = 'success';
+        this.status = 'pending';
       }
     });
   }
