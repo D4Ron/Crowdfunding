@@ -19,10 +19,11 @@ export class CreerCampagneComponent {
     private campaignService: CampaignService
   ) {}
 
-  isOpen = signal(true);
   soumissionTentee = false;
   saving = signal(false);
   errorMsg = signal('');
+  successMsg = signal('');
+  uploadingImage = signal(false);
 
   categories = [
     'Énergie', 'Éducation', 'Santé', 'Artisanat',
@@ -71,13 +72,8 @@ export class CreerCampagneComponent {
     };
   }
 
-  fermer(): void {
-    this.isOpen.set(false);
-    this.router.navigate(['/porteur/dashboard']);
-  }
-
   annuler(): void {
-    this.fermer();
+    this.router.navigate(['/porteur/dashboard']);
   }
 
   enregistrerBrouillon(): void {
@@ -91,7 +87,8 @@ export class CreerCampagneComponent {
     this.campaignService.createCampaign(this.buildRequest()).subscribe({
       next: () => {
         this.saving.set(false);
-        this.router.navigate(['/porteur/mes-campagnes']);
+        this.successMsg.set('Brouillon enregistré avec succès !');
+        setTimeout(() => this.router.navigate(['/porteur/mes-campagnes']), 2000);
       },
       error: (err) => {
         this.saving.set(false);
@@ -110,14 +107,13 @@ export class CreerCampagneComponent {
     // Create campaign then submit for validation
     this.campaignService.createCampaign(this.buildRequest()).subscribe({
       next: (campaign) => {
-        // Submit to validation
         this.campaignService.submitForValidation(campaign.id).subscribe({
           next: () => {
             this.saving.set(false);
-            this.router.navigate(['/porteur/mes-campagnes']);
+            this.successMsg.set('Campagne soumise pour validation !');
+            setTimeout(() => this.router.navigate(['/porteur/mes-campagnes']), 2000);
           },
           error: () => {
-            // Campaign created but not submitted — still navigate
             this.saving.set(false);
             this.router.navigate(['/porteur/mes-campagnes']);
           }
@@ -128,5 +124,22 @@ export class CreerCampagneComponent {
         this.errorMsg.set('Erreur lors de la création. Veuillez réessayer.');
       }
     });
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.uploadingImage.set(true);
+      this.campaignService.uploadImage(file).subscribe({
+        next: (res) => {
+          this.form.imageUrl = res.url;
+          this.uploadingImage.set(false);
+        },
+        error: () => {
+          this.uploadingImage.set(false);
+          this.errorMsg.set('Échec de l\'upload de l\'image.');
+        }
+      });
+    }
   }
 }

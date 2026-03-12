@@ -1,19 +1,19 @@
-@if (isOpen()) {
-  <div class="modal-overlay" (click)="fermer()">
-    <div class="modal" (click)="$event.stopPropagation()">
+<div class="page-container">
+  <div class="page-card">
 
-      <!-- Header -->
-      <div class="modal-header">
-        <h2>Créer une nouvelle campagne</h2>
-        <button class="close-btn" (click)="fermer()" type="button">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
+    <!-- Header -->
+    <div class="page-header">
+      <h1>Créer une nouvelle campagne</h1>
+      <p class="subtitle">Remplissez les informations ci-dessous pour lancer votre projet.</p>
+    </div>
 
-      <!-- Body -->
-      <div class="modal-body">
+    <!-- Body -->
+    <div class="page-body">
+
+      <!-- Success message -->
+      @if (successMsg()) {
+        <div class="success-banner">{{ successMsg() }}</div>
+      }
 
         <!-- Global error -->
         @if (errorMsg()) {
@@ -131,31 +131,40 @@
           <span class="step-title">Image <span class="optional">(optionnel)</span></span>
         </div>
 
-        <!-- Image URL -->
+        <!-- Image Upload -->
         <div class="form-group">
-          <label>URL de l'image de couverture</label>
-          <input
-            type="url"
-            [(ngModel)]="form.imageUrl"
-            name="imageUrl"
-            placeholder="https://exemple.com/image.jpg"
-            class="form-input"/>
-          <p class="hint">Lien direct vers une image (JPG, PNG). Laissez vide pour utiliser l'image par défaut.</p>
+          <label>Image de couverture</label>
+          <div class="upload-wrapper">
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              class="hidden"
+              #fileInput/>
+            <button type="button" class="btn-brouillon" (click)="fileInput.click()" [disabled]="uploadingImage()">
+              {{ uploadingImage() ? 'Upload en cours...' : 'Choisir une image' }}
+            </button>
+            @if (form.imageUrl) {
+              <div class="image-preview">
+                <img [src]="form.imageUrl" alt="Aperçu">
+              </div>
+            }
+          </div>
+          <p class="hint">Formats acceptés : JPG, PNG. Max 5MB.</p>
         </div>
 
       </div>
 
-      <!-- Footer -->
-      <div class="modal-footer">
-        <button class="btn-annuler" (click)="annuler()" type="button">Annuler</button>
-        <button class="btn-brouillon" (click)="enregistrerBrouillon()" [disabled]="saving()" type="button">
-          {{ saving() ? 'Sauvegarde...' : 'Enregistrer comme brouillon' }}
-        </button>
-        <button class="btn-soumettre" (click)="soumettre()" [disabled]="saving()" type="button">
-          {{ saving() ? 'Envoi en cours...' : 'Soumettre à validation' }}
-        </button>
-      </div>
-
+    <!-- Footer -->
+    <div class="page-footer">
+      <button class="btn-annuler" (click)="annuler()" type="button">Annuler</button>
+      <button class="btn-brouillon" (click)="enregistrerBrouillon()" [disabled]="saving()" type="button">
+        {{ saving() ? 'Sauvegarde...' : 'Enregistrer comme brouillon' }}
+      </button>
+      <button class="btn-soumettre" (click)="soumettre()" [disabled]="saving()" type="button">
+        {{ saving() ? 'Envoi en cours...' : 'Soumettre à validation' }}
+      </button>
     </div>
+
   </div>
-}
+</div>

@@ -43,4 +43,10 @@ export class CampaignService {
   getDashboard(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/dashboard`);
   }
+
+  uploadImage(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ url: string }>(`${this.apiUrl}/upload`, formData);
+  }
 }

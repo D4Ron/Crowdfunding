@@ -22,6 +22,12 @@
                     placeholder="votre@email.com" required>
             </div>
 
+            <div class="form-group">
+                <label for="telephone">Numéro de téléphone</label>
+                <input type="tel" id="telephone" name="telephone" [ngModel]="telephone()" (ngModelChange)="telephone.set($event)"
+                    placeholder="90 00 00 00" required>
+            </div>
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
@@ -47,11 +53,6 @@
                     <input type="radio" name="role" value="PORTEUR_DE_PROJET"
                         (change)="role.set('PORTEUR_DE_PROJET')" [checked]="role() === 'PORTEUR_DE_PROJET'">
                     <span>Porteur</span>
-                </label>
-                <label class="role-option" [class.selected]="role() === 'ADMIN'">
-                    <input type="radio" name="role" value="ADMIN"
-                        (change)="role.set('ADMIN')" [checked]="role() === 'ADMIN'">
-                    <span>Administrateur</span>
                 </label>
             </div>
         </div>

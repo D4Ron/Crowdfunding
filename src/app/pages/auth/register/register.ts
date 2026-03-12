@@ -18,6 +18,7 @@ export class RegisterComponent {
 
     nom = signal('');
     email = signal('');
+    telephone = signal('');
     password = signal('');
     confirmPassword = signal('');
     role = signal<Role>('CONTRIBUTEUR');
@@ -25,8 +26,13 @@ export class RegisterComponent {
     error = signal('');
 
     onSubmit() {
-        if (!this.nom() || !this.email() || !this.password()) {
-            this.error.set('Veuillez remplir tous les champs.');
+        if (!this.nom() || !this.email() || !this.password() || !this.telephone()) {
+            this.error.set('Veuillez remplir tous les champs obligatoires.');
+            return;
+        }
+
+        if (this.password().length < 8) {
+            this.error.set('Le mot de passe doit contenir au moins 8 caractères.');
             return;
         }
 
@@ -42,7 +48,8 @@ export class RegisterComponent {
             nom: this.nom(),
             email: this.email(),
             motDePasse: this.password(),
-            role: this.role()
+            role: this.role(),
+            telephone: this.telephone()
         }).subscribe({
             next: (user) => {
                 this.loading.set(false);

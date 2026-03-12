@@ -18,6 +18,7 @@ import { CampaignDetail } from './features/contributeur/campaign-detail/campaign
 import { Notifications as ContributeurNotifications } from './features/contributeur/notifications/notifications';
 import { Profile } from './features/contributeur/profile/profile';
 import { ContributionsComponent } from './features/contributeur/contributions/contributions';
+import { ContributionRetourComponent } from './features/contributions/contribution-retour/contribution-retour';
 
 // Admin Components
 import { AdminLayout } from './pages/admin/layout/admin-layout';
@@ -92,6 +93,7 @@ const routes: Routes = [
       { path: 'contributions', component: ContributionsComponent, canActivate: [AuthGuard] },
       { path: 'notifications', component: ContributeurNotifications, canActivate: [AuthGuard] },
       { path: 'profile', component: Profile, canActivate: [AuthGuard] },
+      { path: 'payment-retour', component: ContributionRetourComponent },
       { path: 'campaigns', component: CampaignListComponent },
       { path: 'campaigns/:id', component: CampaignDetail },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }

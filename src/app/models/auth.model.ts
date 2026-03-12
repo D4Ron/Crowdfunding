@@ -4,7 +4,7 @@ export interface RegisterRequest {
   nom: string;
   email: string;
   motDePasse: string;
-  telephone?: string;
+  telephone: string;
   role: Role;
 }
 
