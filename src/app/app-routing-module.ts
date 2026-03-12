@@ -93,13 +93,11 @@ const routes: Routes = [
       { path: 'contributions', component: ContributionsComponent },
       { path: 'notifications', component: ContributeurNotifications },
       { path: 'profile', component: Profile },
+      { path: 'campaigns', component: CampaignListComponent },
+      { path: 'campaigns/:id', component: CampaignDetail },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
-
-  // Public campaign browsing (no login required to view)
-  { path: 'campaigns', component: CampaignListComponent },
-  { path: 'campaigns/:id', component: CampaignDetail },
 
   // Default Route
   { path: '', redirectTo: 'login', pathMatch: 'full' },

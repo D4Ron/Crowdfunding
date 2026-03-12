@@ -13,44 +13,6 @@
     font-weight: 700;
   }
 
-  .header-center {
-    flex: 1;
-    max-width: 450px;
-    margin: 0 50px;
-
-    .search-bar {
-      position: relative;
-
-      i {
-        position: absolute;
-        left: 18px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #a0aec0;
-        font-size: 18px;
-      }
-
-      input {
-        width: 100%;
-        padding: 14px 20px 14px 50px;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        background-color: #f8fafc;
-        font-size: 15px;
-        outline: none;
-        box-sizing: border-box;
-        font-family: 'Inter', sans-serif;
-        transition: border-color 0.2s, box-shadow 0.2s;
-
-        &::placeholder { color: #a0aec0; }
-
-        &:focus {
-          border-color: #C9A86A;
-          box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.15);
-        }
-      }
-    }
-  }
 
   .header-right {
     display: flex;

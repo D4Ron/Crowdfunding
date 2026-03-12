@@ -5,14 +5,15 @@
 
   <div class="stats-grid">
     <div class="stats-card">
-      <h3>Évolution des collectes (2023)</h3>
+      <h3>Évolution des collectes</h3>
       <div class="chart-wrapper">
+        @if (ready) { <ng-container *ngIf="renderCharts()"></ng-container> }
         <canvas id="lineChart"></canvas>
       </div>
     </div>
 
     <div class="stats-card">
-      <h3>Répartition par catégorie (%)</h3>
+      <h3>Répartition par statut</h3>
       <div class="chart-wrapper">
         <canvas id="barChart"></canvas>
       </div>

@@ -9,21 +9,21 @@
 
     <div class="profile-section">
       <div class="avatar-wrapper">
-        <div class="avatar-circle">AD</div>
+        <div class="avatar-circle">{{ initials() }}</div>
 
       </div>
 
       <div class="form-grid">
         <div class="input-block">
           <label>Nom complet</label>
-          <input type="text" value="Amadou Diallo">
+          <input type="text" [ngModel]="nom()" (ngModelChange)="nom.set($event)">
         </div>
 
         <div class="input-block">
           <label>Email</label>
           <div class="input-prefix">
             <i class="fa-regular fa-envelope"></i>
-            <input type="email" value="amadou.diallo@example.com">
+            <input type="email" [value]="email()" readonly>
           </div>
         </div>
 
@@ -31,7 +31,7 @@
           <label>Téléphone</label>
           <div class="input-prefix">
             <i class="fa-solid fa-phone"></i>
-            <input type="tel" value="+226 70 00 00 00">
+            <input type="tel" [ngModel]="telephone()" (ngModelChange)="telephone.set($event)">
           </div>
         </div>
 
@@ -46,7 +46,12 @@
     </div>
 
     <div class="card-actions">
-      <button class="btn-save">Enregistrer les modifications</button>
+      <button class="btn-save" (click)="save()" [disabled]="saving()">
+        {{ saving() ? 'Enregistrement...' : 'Enregistrer les modifications' }}
+      </button>
+      @if (saveSuccess()) {
+        <span class="success-msg" style="color: green; margin-left: 10px;">Enregistré avec succès!</span>
+      }
     </div>
   </section>
   <section class="settings-card">

@@ -3,13 +3,32 @@
   background-color: #F7F7F2;
   min-height: 100%;
 
-  .page-header {
+  .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 24px;
-
+    .header-content { flex: 1; }
+    
     h2 { font-size: 22px; font-weight: 700; color: #0B1020; margin: 0; }
+    
+    .btn-creer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #C9A86A;
+      color: #0B1020;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s;
+      &:hover { background: #b8954f; }
+      .plus-icon { font-size: 20px; font-weight: 300; }
+    }
 
     .filters {
       display: flex; gap: 8px;

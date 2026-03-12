@@ -15,7 +15,7 @@ export class MesCampagnesComponent implements OnInit {
 
   filters = ['Toutes', 'Actives', 'Brouillons', 'Soumises', 'Terminées'];
   activeFilter = signal('Toutes');
-  campaigns: CampaignResponse[] = [];
+  campaigns = signal<CampaignResponse[]>([]);
   loading = true;
   error = '';
 
@@ -24,7 +24,7 @@ export class MesCampagnesComponent implements OnInit {
   ngOnInit(): void {
     this.campaignService.getMyCampaigns().subscribe({
       next: (data) => {
-        this.campaigns = data;
+        this.campaigns.set(data);
         this.loading = false;
       },
       error: () => {
@@ -36,12 +36,13 @@ export class MesCampagnesComponent implements OnInit {
 
   filteredCampaigns = computed(() => {
     const filter = this.activeFilter();
-    if (filter === 'Toutes') return this.campaigns;
-    if (filter === 'Actives') return this.campaigns.filter(c => c.statut === 'ACTIVE');
-    if (filter === 'Brouillons') return this.campaigns.filter(c => c.statut === 'BROUILLON');
-    if (filter === 'Soumises') return this.campaigns.filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
-    if (filter === 'Terminées') return this.campaigns.filter(c => c.statut === 'FINANCEE' || c.statut === 'EXPIREE');
-    return this.campaigns;
+    const list = this.campaigns();
+    if (filter === 'Toutes') return list;
+    if (filter === 'Actives') return list.filter(c => c.statut === 'ACTIVE');
+    if (filter === 'Brouillons') return list.filter(c => c.statut === 'BROUILLON');
+    if (filter === 'Soumises') return list.filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
+    if (filter === 'Terminées') return list.filter(c => c.statut === 'FINANCEE' || c.statut === 'EXPIREE');
+    return list;
   });
 
   setFilter(filter: string) {
@@ -73,7 +74,7 @@ export class MesCampagnesComponent implements OnInit {
   submit(id: number): void {
     this.campaignService.submitForValidation(id).subscribe({
       next: (updated) => {
-        this.campaigns = this.campaigns.map(c => c.id === id ? updated : c);
+        this.campaigns.update(arr => arr.map(c => c.id === id ? updated : c));
       },
       error: () => alert('Erreur lors de la soumission.')
     });
@@ -82,7 +83,7 @@ export class MesCampagnesComponent implements OnInit {
   delete(id: number): void {
     if (!confirm('Supprimer cette campagne ?')) return;
     this.campaignService.deleteCampaign(id).subscribe({
-      next: () => { this.campaigns = this.campaigns.filter(c => c.id !== id); },
+      next: () => { this.campaigns.update(arr => arr.filter(c => c.id !== id)); },
       error: () => alert('Erreur lors de la suppression.')
     });
   }

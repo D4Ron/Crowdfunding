@@ -36,20 +36,25 @@
             </div>
 
             <div class="form-group">
-                <label>Type de compte</label>
-                <div class="role-selection">
-                    <label class="role-option" [class.selected]="role() === 'CONTRIBUTEUR'">
-                        <input type="radio" name="role" value="CONTRIBUTEUR" (change)="role.set('CONTRIBUTEUR')"
-                            [checked]="role() === 'CONTRIBUTEUR'">
-                        <span>Contributeur</span>
-                    </label>
-                    <label class="role-option" [class.selected]="role() === 'PORTEUR_DE_PROJET'">
-                        <input type="radio" name="role" value="PORTEUR_DE_PROJET"
-                            (change)="role.set('PORTEUR_DE_PROJET')" [checked]="role() === 'PORTEUR_DE_PROJET'">
-                        <span>Porteur</span>
-                    </label>
-                </div>
+            <label>Type de compte</label>
+            <div class="role-selection">
+                <label class="role-option" [class.selected]="role() === 'CONTRIBUTEUR'">
+                    <input type="radio" name="role" value="CONTRIBUTEUR" (change)="role.set('CONTRIBUTEUR')"
+                        [checked]="role() === 'CONTRIBUTEUR'">
+                    <span>Contributeur</span>
+                </label>
+                <label class="role-option" [class.selected]="role() === 'PORTEUR_DE_PROJET'">
+                    <input type="radio" name="role" value="PORTEUR_DE_PROJET"
+                        (change)="role.set('PORTEUR_DE_PROJET')" [checked]="role() === 'PORTEUR_DE_PROJET'">
+                    <span>Porteur</span>
+                </label>
+                <label class="role-option" [class.selected]="role() === 'ADMIN'">
+                    <input type="radio" name="role" value="ADMIN"
+                        (change)="role.set('ADMIN')" [checked]="role() === 'ADMIN'">
+                    <span>Administrateur</span>
+                </label>
             </div>
+        </div>
 
             <div class="form-error" *ngIf="error()">
                 {{ error() }}

@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-aide-support',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './aide-support.html',
   styleUrl: './aide-support.scss',
 })
-export class AideSupport {
-
-}
+export class AideSupport {}

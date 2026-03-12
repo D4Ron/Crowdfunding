@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
 
   filters = ['Toutes', 'Actives', 'Brouillons', 'Soumises'];
   activeFilter = signal('Toutes');
-  campaigns: CampaignResponse[] = [];
+  campaigns = signal<CampaignResponse[]>([]);
   loading = true;
   error = '';
 
@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.campaignService.getMyCampaigns().subscribe({
       next: (data) => {
-        this.campaigns = data;
+        this.campaigns.set(data);
         this.campagnesActives.set(data.filter(c => c.statut === 'ACTIVE').length);
         this.campagnesBrouillon.set(data.filter(c => c.statut === 'BROUILLON').length);
         this.totalCollecte.set(data.reduce((sum, c) => sum + c.montantCollecte, 0));
@@ -46,11 +46,12 @@ export class DashboardComponent implements OnInit {
 
   filteredCampaigns = computed(() => {
     const filter = this.activeFilter();
-    if (filter === 'Toutes') return this.campaigns;
-    if (filter === 'Actives') return this.campaigns.filter(c => c.statut === 'ACTIVE');
-    if (filter === 'Brouillons') return this.campaigns.filter(c => c.statut === 'BROUILLON');
-    if (filter === 'Soumises') return this.campaigns.filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
-    return this.campaigns;
+    const list = this.campaigns();
+    if (filter === 'Toutes') return list;
+    if (filter === 'Actives') return list.filter(c => c.statut === 'ACTIVE');
+    if (filter === 'Brouillons') return list.filter(c => c.statut === 'BROUILLON');
+    if (filter === 'Soumises') return list.filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
+    return list;
   });
 
   setFilter(filter: string) {

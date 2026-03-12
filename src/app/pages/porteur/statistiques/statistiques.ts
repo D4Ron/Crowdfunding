@@ -1,60 +1,83 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { CampaignService } from '../../../core/services/campaign.service';
+import { CommonModule } from '@angular/common';
 
 Chart.register(...registerables);
 
 @Component({
   selector: 'app-statistiques',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './statistiques.html',
   styleUrls: ['./statistiques.scss']
 })
-export class Statistiques implements AfterViewInit {
+export class Statistiques implements OnInit, AfterViewInit {
+  dashboardData: any = null;
+  campaigns: any[] = [];
+  ready = false;
 
-  ngAfterViewInit() {
-    this.renderLineChart();
-    this.renderBarChart();
+  constructor(private campaignService: CampaignService) {}
+
+  ngOnInit(): void {
+    this.campaignService.getDashboard().subscribe({
+      next: (data) => { this.dashboardData = data; this.ready = true; },
+      error: () => { this.ready = true; } // fallback: show empty charts
+    });
+    this.campaignService.getMyCampaigns().subscribe({
+      next: (list) => { this.campaigns = list; },
+      error: () => {}
+    });
   }
 
-  renderLineChart() {
+  ngAfterViewInit(): void {}
+
+  // Call renderCharts() from template after data is ready using @if(ready)
+  renderCharts(): boolean {
+    setTimeout(() => {
+      this.renderLineChart();
+      this.renderBarChart();
+    }, 0);
+    return true;
+  }
+
+  renderLineChart(): void {
+    const existing = Chart.getChart('lineChart');
+    if (existing) existing.destroy();
+    const daily = this.dashboardData?.dailyCollections ?? {};
+    const labels = Object.keys(daily).sort();
+    const values = labels.map(k => Number(daily[k]));
     new Chart('lineChart', {
       type: 'line',
       data: {
-        labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'],
+        labels: labels.length ? labels : ['Aucune donnee'],
         datasets: [{
-          label: 'Collectes (F CFA)',
-          data: [3500000, 2800000, 5000000, 7200000, 6000000, 9500000, 12000000],
-          borderColor: '#C9A86A', // Or champagne officiel
-          backgroundColor: 'rgba(201, 168, 106, 0.1)',
-          fill: true,
-          tension: 0.4 // Pour l'effet de courbe fluide
+          label: 'Collectes (FCFA)',
+          data: values.length ? values : [0],
+          borderColor: '#C9A86A',
+          backgroundColor: 'rgba(201,168,106,0.1)',
+          fill: true, tension: 0.4
         }]
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } }
-      }
+      options: { responsive: true, maintainAspectRatio: false,
+                  plugins: { legend: { display: false } } }
     });
   }
 
-  renderBarChart() {
+  renderBarChart(): void {
+    const existing = Chart.getChart('barChart');
+    if (existing) existing.destroy();
+    const statusLabels = ['ACTIVE', 'BROUILLON', 'EN_ATTENTE_VALIDATION', 'FINANCEE', 'EXPIREE', 'REJETEE'];
+    const friendlyLabels = ['Actives', 'Brouillons', 'En attente', 'Financees', 'Expirees', 'Rejetees'];
+    const counts = statusLabels.map(s => this.campaigns.filter(c => c.statut === s).length);
     new Chart('barChart', {
       type: 'bar',
       data: {
-        labels: ['Agriculture', 'Technologie', 'Santé', 'Éducation', 'Artisanat'],
-        datasets: [{
-          data: [90, 75, 60, 45, 20],
-          backgroundColor: '#0f172a', // Navy FoundTogo
-          borderRadius: 5
-        }]
+        labels: friendlyLabels,
+        datasets: [{ data: counts, backgroundColor: '#0f172a', borderRadius: 5 }]
       },
-      options: {
-        indexAxis: 'y', // Pour avoir les barres horizontales
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } }
-      }
+      options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                  plugins: { legend: { display: false } } }
     });
   }
-}
+}
