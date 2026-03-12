@@ -99,12 +99,18 @@ const routes: Routes = [
   },
 
   // Public Campaign Routes
-  { path: 'campaigns', component: CampaignListComponent },
-  { path: 'campaigns/:id', component: CampaignDetail },
+  {
+    path: '',
+    component: ContributeurLayout,
+    children: [
+      { path: 'campaigns', component: CampaignListComponent },
+      { path: 'campaigns/:id', component: CampaignDetail },
+    ]
+  },
 
   // Default Route
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' }
+  { path: '', redirectTo: 'campaigns', pathMatch: 'full' },
+  { path: '**', redirectTo: 'campaigns' }
 ];
 
 @NgModule({
