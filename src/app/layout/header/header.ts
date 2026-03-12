@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../../core/services/user.service';
+import { UserService } from '../../core/services/user.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -20,8 +20,8 @@ export class HeaderComponent implements OnInit {
   notifCount = 0;
 
   ngOnInit() {
-    this.userService.getCurrentUser().subscribe(user => {
-      if (user) {
+    this.userService.getMe().subscribe((user: any) => {
+      if (user && user.nom) {
         this.userName = user.nom;
         this.userInitials = user.nom.substring(0, 2).toUpperCase();
       }
