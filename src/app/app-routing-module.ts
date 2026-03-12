@@ -98,6 +98,10 @@ const routes: Routes = [
     ]
   },
 
+  // Public Campaign Routes
+  { path: 'campaigns', component: CampaignListComponent },
+  { path: 'campaigns/:id', component: CampaignDetail },
+
   // Default Route
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', redirectTo: 'login' }

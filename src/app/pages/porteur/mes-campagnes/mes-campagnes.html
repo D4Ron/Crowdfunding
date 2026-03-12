@@ -2,7 +2,7 @@
 
   <div class="header">
     <div class="header-content">
-      <h1>Mes campagnes</h1>
+      <h2>Mes campagnes</h2>
       <p>Retrouvez et gérez l'ensemble de vos projets de levée de fonds.</p>
     </div>
     <button class="btn-creer" routerLink="/porteur/creer-campagne">
@@ -28,7 +28,7 @@
   </div>
 
   @if (filteredCampaigns().length > 0) {
-  <div class="campaigns-grid">
+  <div class="campaigns-list">
     @for (c of filteredCampaigns(); track c.id) {
     <div class="campaign-card">
       <div class="campaign-img">
@@ -50,42 +50,31 @@
         <p class="description">{{ c.description }}</p>
 
         <div class="amounts">
-          <div class="amount-item">
-            <span class="label">Collecté</span>
-            <span class="value">{{ c.montantCollecte | number }} F CFA</span>
-          </div>
-          <div class="amount-item goal">
-            <span class="label">Objectif</span>
-            <span class="value">{{ c.objectifCfa | number }} F CFA</span>
-          </div>
+          <span class="collected">{{ c.montantCollecte | number }} F CFA</span>
+          <span class="goal">Objectif {{ c.objectifCfa | number }} F CFA</span>
         </div>
 
-        <div class="progress-container">
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="c.pourcentageAtteint"></div>
-          </div>
-          <span class="percent">{{ c.pourcentageAtteint }}%</span>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="c.pourcentageAtteint"></div>
         </div>
 
-        <div class="meta">
+        <div class="campaign-meta">
           <div class="meta-item">
-            <span class="icon">👥</span>
-            <span class="text">{{ c.nombreContributeurs }} contributeurs</span>
+            👥 {{ c.nombreContributeurs }} contributeurs
           </div>
           <div class="meta-item">
-            <span class="icon">📅</span>
-            <span class="text">{{ c.joursRestants }} jours restants</span>
+            📅 {{ c.joursRestants }} jours restants
           </div>
         </div>
 
-        <div class="actions">
-          <button class="action-btn view" title="Voir les détails" [routerLink]="['/campaigns', c.id]">Voir</button>
-          <button class="action-btn edit" title="Modifier"
+        <div class="campaign-actions">
+          <button class="action-btn" title="Voir les détails" [routerLink]="['/campaigns', c.id]">Voir</button>
+          <button class="action-btn" title="Modifier"
             [routerLink]="['/porteur/modifier-campagne', c.id]">Modifier</button>
           @if (canSubmit(c.statut)) {
-          <button class="action-btn submit" title="Soumettre pour validation" (click)="submit(c.id)">Soumettre</button>
+          <button class="action-btn submit-btn" title="Soumettre pour validation" (click)="submit(c.id)">Soumettre</button>
           }
-          <button class="action-btn delete" title="Supprimer" (click)="delete(c.id)">Supprimer</button>
+          <button class="action-btn danger" title="Supprimer" (click)="delete(c.id)">Supprimer</button>
         </div>
       </div>
     </div>
