@@ -41,6 +41,7 @@ import { ContributeurLayout } from './layout/contributeur-layout/contributeur-la
 // Guards
 import { AdminGuard } from './core/guards/admin.guard';
 import { AuthGuard } from './core/guards/auth.guard';
+import { LandingPage } from './pages/landing/landing';
 
 const routes: Routes = [
   // Auth Routes (public)
@@ -100,19 +101,11 @@ const routes: Routes = [
     ]
   },
 
-  // Public Campaign Routes
-  {
-    path: '',
-    component: ContributeurLayout,
-    children: [
-      { path: 'campaigns', component: CampaignListComponent },
-      { path: 'campaigns/:id', component: CampaignDetail },
-    ]
-  },
-
-  // Default Route
-  { path: '', redirectTo: 'campaigns', pathMatch: 'full' },
-  { path: '**', redirectTo: 'campaigns' }
+  // Route par défaut (Landing Page)
+  { path: '', component: LandingPage, pathMatch: 'full' },
+  
+  // Redirection générique si page introuvable
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

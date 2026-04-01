@@ -140,7 +140,7 @@
 
             <button
               (click)="contribuer()"
-              [disabled]="isProcessing || !montantDon || montantDon <= 0"
+              [disabled]="isProcessing || !montantDon || montantDon <= 0 || !telephone.trim()"
               class="w-full bg-slate-900 hover:bg-black disabled:bg-slate-300 disabled:cursor-not-allowed text-white py-5 rounded-2xl font-bold text-lg shadow-lg shadow-slate-200 transition-all flex justify-center items-center gap-2">
               @if (isProcessing) {
                 <span class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>

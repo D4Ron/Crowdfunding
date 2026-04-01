@@ -27,6 +27,25 @@
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --radius: 12px;
   --radius-full: 9999px;
+
+  // Landing page tokens (used by Kigui components)
+  --color-dark: #0f172a;
+  --color-white: #ffffff;
+  --color-gold: #c9a84c;
+  --color-gold-light: #dfc06a;
+  --color-cream: #faf8f4;
+  --color-text: #374151;
+  --color-text-muted: #6b7280;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// Landing page container utility
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 * {
