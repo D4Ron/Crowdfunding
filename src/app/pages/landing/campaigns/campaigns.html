@@ -1,0 +1,100 @@
+<section class="campaigns" id="campagnes">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="campaigns__header">
+      <h2 class="campaigns__title">
+        Campagnes en cours
+      </h2>
+      <p class="campaigns__subtitle">
+        Découvrez et soutenez des projets qui transforment l'Afrique de l'Ouest.
+      </p>
+    </div>
+
+    <!-- Barre de recherche + filtres -->
+    <div class="campaigns__toolbar">
+      <div class="search-bar">
+        <span class="search-bar__icon">🔍</span>
+        <input type="text" placeholder="Rechercher une campagne..." />
+      </div>
+
+      <div class="filters">
+        @for (filter of filters; track filter) {
+        <button
+          class="filter-btn"
+          [class.active]="activeFilter() === filter"
+          (click)="setFilter(filter)">
+          {{ filter }}
+        </button>
+        }
+      </div>
+    </div>
+
+    <!-- Grille de campagnes -->
+    <div class="campaigns__grid">
+      @for (campaign of filteredCampaigns; track campaign.id) {
+      <div class="campaign-card">
+
+        <!-- Image / Placeholder -->
+        <div class="campaign-card__img">
+          <span class="campaign-card__category">{{ campaign.category }}</span>
+          <div class="campaign-card__placeholder">
+            @if (campaign.category === 'SANTÉ') { 🏥 }
+            @else if (campaign.category === 'AGRICULTURE') { 🌾 }
+            @else if (campaign.category === 'ÉDUCATION') { 🎓 }
+            @else if (campaign.category === 'INNOVATION') { 💡 }
+            @else { 🚀 }
+          </div>
+        </div>
+
+        <!-- Contenu -->
+        <div class="campaign-card__body">
+          <h3 class="campaign-card__title">{{ campaign.title }}</h3>
+          <p class="campaign-card__desc">{{ campaign.description }}</p>
+
+          <!-- Progress -->
+          <div class="campaign-card__progress">
+            <div class="progress-row">
+              <div>
+                <div class="progress-label">COLLECTÉS</div>
+                <div class="progress-amount">{{ campaign.collected }}</div>
+              </div>
+              <span class="progress-percent">{{ campaign.percent }}%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-bar__fill"
+                   [style.width.%]="campaign.percent">
+              </div>
+            </div>
+            <div class="progress-goal">Objectif : {{ campaign.goal }}</div>
+          </div>
+
+          <!-- Meta -->
+          <div class="campaign-card__meta">
+            <span>👥 {{ campaign.contributors }} CONTRIBUTEURS</span>
+            <span>🕐 {{ campaign.days }} JOURS</span>
+          </div>
+
+          <!-- Bouton -->
+          <button [routerLink]="['/campaigns', campaign.id]" class="campaign-card__btn">Voir la campagne</button>
+        </div>
+
+      </div>
+      }
+    </div>
+
+    <!-- Empty state or CTA -->
+    <div style="text-align: center; margin-top: 48px;">
+      @if (loading()) {
+        <p>Chargement des campagnes...</p>
+      } @else if (campaigns().length === 0) {
+        <p>Aucune campagne disponible pour le moment.</p>
+      } @else {
+        <a routerLink="/campaigns" class="for-projects__btn for-projects__btn--outline" style="border: 2px solid var(--color-gold); color: var(--color-gold); padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          Voir toutes les campagnes
+        </a>
+      }
+    </div>
+
+  </div>
+</section>

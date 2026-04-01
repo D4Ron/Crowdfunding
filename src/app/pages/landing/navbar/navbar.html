@@ -1,0 +1,31 @@
+<nav class="navbar" [class.scrolled]="isScrolled()">
+  <div class="container navbar__inner">
+
+    <!-- Logo -->
+    <a class="navbar__logo" href="#">
+      <span class="logo-text">🌿 FOUND TOGO</span>
+    </a>
+
+    <!-- Liens nav centre -->
+    <ul class="navbar__links" [class.open]="menuOpen()">
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#campagnes">Campagnes</a></li>
+      <li><a href="#comment">Comment ça marche</a></li>
+    </ul>
+
+    <!-- Actions droite -->
+    <div class="navbar__actions" [class.open]="menuOpen()">
+      <a routerLink="/login" class="btn btn--ghost">Connexion</a>
+      <a routerLink="/register" class="btn btn--outline">S'inscrire</a>
+      <a routerLink="/register" class="btn btn--gold">Lancer une campagne</a>
+    </div>
+
+    <!-- Burger mobile -->
+    <button class="navbar__burger" (click)="toggleMenu()">
+      <span [class.open]="menuOpen()"></span>
+      <span [class.open]="menuOpen()"></span>
+      <span [class.open]="menuOpen()"></span>
+    </button>
+
+  </div>
+</nav>

@@ -1,0 +1,32 @@
+<section class="how-it-works" id="comment">
+  <div class="container">
+
+    <div class="how-it-works__header">
+      <h2 class="how-it-works__title">Comment ça marche</h2>
+      <p class="how-it-works__subtitle">
+        En trois étapes simples, participez à la transformation de l'Afrique de l'Ouest.
+      </p>
+    </div>
+
+    <div class="how-it-works__steps">
+      @for (step of steps; track step.number) {
+      <div class="step">
+        <!-- Icône avec numéro -->
+        <div class="step__icon-wrapper">
+          <div class="step__icon">{{ step.icon }}</div>
+          <span class="step__number">{{ step.number }}</span>
+        </div>
+
+        <!-- Ligne de connexion (sauf dernier) -->
+        @if (step.number !== '3') {
+        <div class="step__connector"></div>
+        }
+
+        <h3 class="step__title">{{ step.title }}</h3>
+        <p class="step__desc">{{ step.description }}</p>
+      </div>
+      }
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,260 @@
+.hero {
+  background: var(--color-dark);
+  padding: 100px 0 80px;
+  overflow: hidden;
+
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  // ── Contenu gauche ──────────────────────
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  &__badge {
+    display: inline-block;
+    background: rgba(201, 168, 76, 0.15);
+    color: var(--color-gold);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    width: fit-content;
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--color-white);
+    line-height: 1.15;
+
+    &--gold {
+      color: var(--color-gold);
+    }
+  }
+
+  &__subtitle {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    max-width: 480px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  // ── Stats ────────────────────────────────
+  &__stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-top: 8px;
+  }
+
+  &__visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  // ── Card flottante ───────────────────────
+  &__card {
+    background: var(--color-white);
+    border-radius: 16px;
+    padding: 28px;
+    width: 340px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--color-dark);
+    }
+
+    p {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+  }
+
+  &__card-badge {
+    display: inline-block;
+    background: var(--color-dark);
+    color: var(--color-white);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    width: fit-content;
+  }
+
+  &__card-img {
+    font-size: 48px;
+    text-align: center;
+    padding: 16px;
+    background: var(--color-cream);
+    border-radius: 12px;
+  }
+
+  &__card-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  // ── Bulles décoratives ───────────────────
+  &__bubble {
+    position: absolute;
+    background: var(--color-white);
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-dark);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+    &--1 {
+      top: 20px;
+      right: -10px;
+    }
+
+    &--2 {
+      bottom: 40px;
+      left: -10px;
+    }
+  }
+}
+
+// ── Progress bar ─────────────────────────
+.progress-bar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+
+  &__fill {
+    height: 100%;
+    background: var(--color-gold);
+    border-radius: 3px;
+  }
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+
+  &__collected {
+    font-weight: 600;
+    color: var(--color-dark);
+  }
+
+  &__percent {
+    font-weight: 700;
+    color: var(--color-gold);
+  }
+}
+
+// ── Stats ────────────────────────────────
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-white);
+  }
+
+  &__label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+// ── Boutons hero ─────────────────────────
+.btn {
+  &--gold-lg {
+    display: inline-block;
+    background: var(--color-gold);
+    color: var(--color-dark);
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--color-gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+  }
+
+  &--outline-lg {
+    display: inline-block;
+    background: transparent;
+    color: var(--color-white);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--color-white);
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+// ── Responsive ───────────────────────────
+@media (max-width: 768px) {
+  .hero {
+    padding: 80px 0 60px;
+
+    &__inner {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    &__title {
+      font-size: 36px;
+    }
+
+    &__visual {
+      display: none;
+    }
+  }
+}

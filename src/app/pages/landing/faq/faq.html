@@ -1,0 +1,33 @@
+<section class="faq">
+  <div class="container">
+
+    <div class="faq__header">
+      <h2 class="faq__title">Questions fréquentes</h2>
+      <p class="faq__subtitle">
+        Tout ce que vous devez savoir sur FOUND TOGO et son fonctionnement.
+      </p>
+    </div>
+
+    <div class="faq__list">
+      @for (item of items; track item.id) {
+      <div class="faq-item" [class.open]="openId() === item.id">
+
+        <button class="faq-item__question" (click)="toggle(item.id)">
+          <span>{{ item.question }}</span>
+          <span class="faq-item__icon">
+              {{ openId() === item.id ? '−' : '+' }}
+            </span>
+        </button>
+
+        @if (openId() === item.id) {
+        <div class="faq-item__answer">
+          <p>{{ item.answer }}</p>
+        </div>
+        }
+
+      </div>
+      }
+    </div>
+
+  </div>
+</section>
