@@ -23,17 +23,17 @@
       <!-- Stats -->
       <div class="hero__stats">
         <div class="stat">
-          <span class="stat__value">120+</span>
+          <span class="stat__value">{{ loading() ? '...' : activeCount() + '+' }}</span>
           <span class="stat__label">Campagnes actives</span>
         </div>
         <div class="stat__divider"></div>
         <div class="stat">
-          <span class="stat__value">45M FCFA</span>
+          <span class="stat__value">{{ loading() ? '...' : formatCurrency(totalCollected()) + ' FCFA' }}</span>
           <span class="stat__label">Collectés</span>
         </div>
         <div class="stat__divider"></div>
         <div class="stat">
-          <span class="stat__value">3 200+</span>
+          <span class="stat__value">{{ loading() ? '...' : totalContributors() + '+' }}</span>
           <span class="stat__label">Contributeurs</span>
         </div>
       </div>
@@ -41,27 +41,48 @@
 
     <!-- Contenu droit — carte flottante -->
     <div class="hero__visual">
-      <div class="hero__card">
-        <div class="hero__card-badge">SANTÉ</div>
-        <div class="hero__card-img">🏥</div>
-        <h3>Centre mobile de santé communautaire</h3>
-        <p>Un dispensaire itinérant pour apporter des soins aux villages isolés.</p>
+      <div class="hero__card" *ngIf="featuredCampaign() as campaign; else defaultCard">
+        <div class="hero__card-badge">{{ campaign.categorie || 'PROJET' | uppercase }}</div>
+        <div class="hero__card-img">🌍</div>
+        <h3 [title]="campaign.titre">{{ (campaign.titre && campaign.titre.length > 40 ? (campaign.titre | slice:0:40) + '...' : campaign.titre) || 'Campagne en vedette' }}</h3>
+        <p>{{ (campaign.description && campaign.description.length > 60 ? (campaign.description | slice:0:60) + '...' : campaign.description) || 'Soutenez ce projet impactant.' }}</p>
         <div class="hero__card-progress">
           <div class="progress-bar">
-            <div class="progress-bar__fill" style="width: 53%"></div>
+            <div class="progress-bar__fill" [style.width.%]="campaign.pourcentageAtteint || 0"></div>
           </div>
           <div class="progress-info">
-            <span class="progress-info__collected">1 850 000 FCFA</span>
-            <span class="progress-info__percent">53%</span>
+            <span class="progress-info__collected">{{ formatCurrency(campaign.montantCollecte || 0) }} FCFA</span>
+            <span class="progress-info__percent">{{ (campaign.pourcentageAtteint || 0) | number:'1.0-0' }}%</span>
           </div>
         </div>
-        <button routerLink="/campaigns" class="btn btn--gold-lg" style="width:100%; text-align:center">
+        <button [routerLink]="['/campaigns', campaign.id]" class="btn btn--gold-lg" style="width:100%; text-align:center">
           Voir la campagne
         </button>
       </div>
 
+      <ng-template #defaultCard>
+        <div class="hero__card">
+          <div class="hero__card-badge">SANTÉ</div>
+          <div class="hero__card-img">🏥</div>
+          <h3>Centre mobile de santé communautaire</h3>
+          <p>Un dispensaire itinérant pour apporter des soins aux villages isolés.</p>
+          <div class="hero__card-progress">
+            <div class="progress-bar">
+              <div class="progress-bar__fill" style="width: 53%"></div>
+            </div>
+            <div class="progress-info">
+              <span class="progress-info__collected">1 850 000 FCFA</span>
+              <span class="progress-info__percent">53%</span>
+            </div>
+          </div>
+          <button routerLink="/campaigns" class="btn btn--gold-lg" style="width:100%; text-align:center">
+            Voir la campagne
+          </button>
+        </div>
+      </ng-template>
+
       <!-- Bulle décorative -->
-      <div class="hero__bubble hero__bubble--1">+89 contributeurs</div>
+      <div class="hero__bubble hero__bubble--1">{{ loading() ? '+89' : '+' + totalContributors() }} contributeurs</div>
       <div class="hero__bubble hero__bubble--2">✅ Sécurisé</div>
     </div>
 

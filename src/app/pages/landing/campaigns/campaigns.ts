@@ -33,15 +33,16 @@ export class CampaignsComponent implements OnInit {
   ngOnInit() {
     this.campaignService.getActiveCampaigns().subscribe({
       next: (res: any) => {
-        const mapped = res.data.slice(0, 3).map((c: any) => ({
+        const rawData = res.data || res;
+        const mapped = rawData.slice(0, 3).map((c: any) => ({
           id: c.id,
           category: c.categorie,
           title: c.titre,
-          description: c.description.length > 100 ? c.description.substring(0, 100) + '...' : c.description,
-          collected: new Intl.NumberFormat('fr-FR').format(c.montantCollecte) + ' FCFA',
-          percent: c.objectifCfa > 0 ? Math.round((c.montantCollecte / c.objectifCfa) * 100) : 0,
-          goal: new Intl.NumberFormat('fr-FR').format(c.objectifCfa) + ' FCFA',
-          contributors: c.contributeursCount || 0,
+          description: c.description && c.description.length > 100 ? c.description.substring(0, 100) + '...' : c.description || '',
+          collected: new Intl.NumberFormat('fr-FR').format(c.montantCollecte || 0) + ' FCFA',
+          percent: c.objectifCfa > 0 ? Math.round(((c.montantCollecte || 0) / c.objectifCfa) * 100) : 0,
+          goal: new Intl.NumberFormat('fr-FR').format(c.objectifCfa || 0) + ' FCFA',
+          contributors: c.nombreContributeurs || 0,
           days: this.calculateDaysRemaining(c.dateFin)
         }));
         this.campaigns.set(mapped);
