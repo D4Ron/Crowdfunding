@@ -77,10 +77,24 @@ export class CampaignDetail implements OnInit {
       next: (res) => {
         this.isProcessing = false;
         this.successMessage = `Contribution réussie ! Référence : ${res.referenceTransaction}`;
-        // Reload campaign to update collected amount
-        this.campaignService.getCampaignById(this.campagne!.id).subscribe(
-          updated => (this.campagne = updated)
-        );
+
+        // Optimistic update: immediately reflect the contribution in the UI
+        if (this.campagne) {
+          this.campagne = {
+            ...this.campagne,
+            montantCollecte: this.campagne.montantCollecte + res.montantNet,
+            nombreContributeurs: this.campagne.nombreContributeurs + 1,
+            pourcentageAtteint: Math.min(100, Math.round(
+              ((this.campagne.montantCollecte + res.montantNet) / this.campagne.objectifCfa) * 100
+            ))
+          };
+        }
+
+        // Also re-fetch from backend for authoritative data
+        this.campaignService.getCampaignById(this.campagne!.id).subscribe({
+          next: (updated) => (this.campagne = updated),
+          error: () => {} // keep the optimistic update on failure
+        });
       },
       error: () => {
         this.isProcessing = false;

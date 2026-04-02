@@ -37,7 +37,10 @@ export class DashboardComponent implements OnInit {
     });
 
     this.campaignService.getActiveCampaigns().subscribe({
-      next: (data) => (this.campaigns = data.slice(0, 3)),
+      next: (res: any) => {
+        const data = res.data || res;
+        this.campaigns = data.slice(0, 3);
+      },
       error: () => {}
     });
   }
