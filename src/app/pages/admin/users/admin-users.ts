@@ -84,4 +84,13 @@ export class AdminUsers implements OnInit {
             error: () => this.actionLoading.set(null)
         });
     }
+
+    unban(id: number): void {
+        if (!confirm('Débannir cet utilisateur ?')) return;
+        this.actionLoading.set(id);
+        this.adminService.unbanUser(id).subscribe({
+            next: (updated) => { this.store.updateUser(updated); this.actionLoading.set(null); },
+            error: () => this.actionLoading.set(null)
+        });
+    }
 }

@@ -49,6 +49,10 @@ export class AdminService {
     return this.http.patch<User>(`${this.apiUrl}/users/${id}/ban`, {});
   }
 
+  unbanUser(id: number): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}/users/${id}/unban`, {});
+  }
+
   // Transactions
   getAllTransactions(): Observable<ContributionResponse[]> {
     return this.http.get<ContributionResponse[]>(`${this.apiUrl}/transactions`);

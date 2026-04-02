@@ -38,6 +38,8 @@
                 *ngIf="u.actif && !u.banni">Suspendre</button>
             <button class="btn btn-sm btn-danger" (click)="ban(u.id)" [disabled]="actionLoading() === u.id"
                 *ngIf="!u.banni">Bannir</button>
+            <button class="btn btn-sm btn-success" (click)="unban(u.id)" [disabled]="actionLoading() === u.id"
+                *ngIf="u.banni">Débannir</button>
         </div>
     </div>
 </div>

@@ -10,7 +10,7 @@ import { Statistiques } from './pages/porteur/statistiques/statistiques';
 import { Notifications as PorteurNotifications } from './pages/porteur/notifications/notifications';
 import { Parametres } from './pages/porteur/parametres/parametres';
 
-// Contributeur Features
+import { PublicCampaigns } from './pages/public-campaigns/public-campaigns';
 import { DashboardComponent as ContributeurDashboard } from './features/contributeur/dashboard/dashboard';
 import { TransactionHistory } from './features/contributeur/transaction-history/transaction-history';
 import { CampaignListComponent } from './features/contributeur/campaign-list/campaign-list';
@@ -84,7 +84,6 @@ const routes: Routes = [
   },
 
   // Contributeur Routes
-  // NOTE: campaign list & detail are accessible without login (public browsing)
   {
     path: 'contributeur',
     component: ContributeurLayout,
@@ -95,11 +94,14 @@ const routes: Routes = [
       { path: 'notifications', component: ContributeurNotifications, canActivate: [AuthGuard] },
       { path: 'profile', component: Profile, canActivate: [AuthGuard] },
       { path: 'payment-retour', component: ContributionRetourComponent },
-      { path: 'campaigns', component: CampaignListComponent },
-      { path: 'campaigns/:id', component: CampaignDetail },
+      { path: 'supported', component: CampaignListComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
+
+  // Public Campaign Routes
+  { path: 'campaigns', component: PublicCampaigns },
+  { path: 'campaigns/:id', component: CampaignDetail },
 
   // Route par défaut (Landing Page)
   { path: '', component: LandingPage, pathMatch: 'full' },

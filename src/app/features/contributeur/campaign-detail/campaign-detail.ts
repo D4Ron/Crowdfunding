@@ -6,11 +6,13 @@ import { ContributionService } from '../../../core/services/contribution.service
 import { CampaignService } from '../../../core/services/campaign.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { CampaignResponse } from '../../../models/campaign.model';
+import { Navbar } from '../../../pages/landing/navbar/navbar';
+import { Footer } from '../../../pages/landing/footer/footer';
 
 @Component({
   selector: 'app-campaign-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, Navbar, Footer],
   templateUrl: './campaign-detail.html'
 })
 export class CampaignDetail implements OnInit {

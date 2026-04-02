@@ -1,0 +1,91 @@
+<app-navbar></app-navbar>
+
+<section class="public-campaigns">
+  <div class="container relative z-10 mx-auto px-4">
+    
+    <div class="public-campaigns__header fade-in">
+      <h1>Découvrez et soutenez des projets impactants</h1>
+      <p>Parcourez l'ensemble des campagnes disponibles sur FoundTogo et participez à transformer l'Afrique de l'Ouest.</p>
+    </div>
+
+    <!-- Filtres -->
+    <div class="filters-bar fade-in">
+      @for (filter of filters; track filter) {
+        <button
+          class="filter-btn"
+          [class.active]="activeFilter() === filter"
+          (click)="setFilter(filter)">
+          {{ filter }}
+        </button>
+      }
+    </div>
+
+    @if (loading()) {
+      <div class="flex justify-center py-16">
+        <div class="w-10 h-10 border-4 border-slate-200 border-t-amber-500 rounded-full animate-spin"></div>
+      </div>
+    }
+
+    <!-- Grille de campagnes -->
+    <div class="public-campaigns__grid fade-in">
+      @for (campaign of filteredCampaigns; track campaign.id) {
+        <div class="campaign-card">
+          <!-- Image / Placeholder -->
+          <div class="campaign-card__img">
+            <span class="campaign-card__category">{{ campaign.category }}</span>
+            <div class="campaign-card__placeholder">
+              @if (campaign.category === 'SANTÉ') { 🏥 }
+              @else if (campaign.category === 'AGRICULTURE') { 🌾 }
+              @else if (campaign.category === 'ÉDUCATION') { 🎓 }
+              @else if (campaign.category === 'INNOVATION') { 💡 }
+              @else { 🚀 }
+            </div>
+          </div>
+
+          <!-- Contenu -->
+          <div class="campaign-card__body">
+            <h3 class="campaign-card__title">{{ campaign.title }}</h3>
+            <p class="campaign-card__desc">{{ campaign.description }}</p>
+
+            <!-- Progress -->
+            <div class="campaign-card__progress">
+              <div class="progress-row">
+                <div>
+                  <div class="progress-label">COLLECTÉS</div>
+                  <div class="progress-amount">{{ campaign.collected }}</div>
+                </div>
+                <span class="progress-percent">{{ campaign.percent }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-bar__fill"
+                     [style.width.%]="campaign.percent">
+                </div>
+              </div>
+              <div class="progress-goal">Objectif : {{ campaign.goal }}</div>
+            </div>
+
+            <!-- Meta -->
+            <div class="campaign-card__meta">
+              <span>👥 {{ campaign.contributors }} CONTRIBUTEUR(S)</span>
+              <span>🕐 {{ campaign.days }} JOUR(S)</span>
+            </div>
+
+            <!-- Bouton -->
+            <button [routerLink]="['/campaigns', campaign.id]" class="campaign-card__btn">Voir la campagne</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (!loading() && filteredCampaigns.length === 0) {
+      <div class="text-center py-20 bg-white rounded-3xl shadow-sm border border-slate-100 mt-8">
+        <div class="text-6xl mb-4">🚀</div>
+        <h3 class="text-xl font-bold text-slate-700">Aucune campagne trouvée</h3>
+        <p class="text-slate-500 mt-2 max-w-md mx-auto">Aucune campagne ne correspond à cette catégorie pour le moment.</p>
+      </div>
+    }
+
+  </div>
+</section>
+
+<app-footer></app-footer>

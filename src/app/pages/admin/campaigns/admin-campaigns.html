@@ -3,6 +3,13 @@
 <div class="filters">
     <input class="search-box" [value]="query()" (input)="query.set($any($event.target).value)"
         placeholder="Rechercher par titre, porteur, catégorie..." />
+    <select class="role-select" [value]="statusFilter()" (change)="statusFilter.set($any($event.target).value)" style="padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; outline: none; margin-left: 10px;">
+        <option value="EN_ATTENTE_VALIDATION">En attente de validation</option>
+        <option value="ACTIVE">Actives</option>
+        <option value="REJETEE">Rejetées</option>
+        <option value="FINANCEE">Financées</option>
+        <option value="all">Toutes les campagnes</option>
+    </select>
 </div>
 
 <!-- Reject reason modal -->

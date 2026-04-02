@@ -20,6 +20,7 @@ export class AdminCampaigns implements OnInit {
     // Local state for campaigns shown in this view (pending specifically)
     readonly campaigns = signal<CampaignResponse[]>([]);
     readonly query = signal('');
+    readonly statusFilter = signal<'all' | 'EN_ATTENTE_VALIDATION' | 'ACTIVE' | 'REJETEE' | 'FINANCEE'>('EN_ATTENTE_VALIDATION');
     readonly actionLoading = signal<number | null>(null);
     readonly rejectReason = signal('');
     readonly rejectingId = signal<number | null>(null);
@@ -41,20 +42,21 @@ export class AdminCampaigns implements OnInit {
 
     filtered() {
         const q = this.query().toLowerCase();
-        let list = this.campaigns();
+        const sf = this.statusFilter();
         
-        // Also fallback to store campaigns if local list is empty, filtering for pending locally
-        if (list.length === 0) {
-            list = this.storeCampaigns().filter(c => c.statut === 'EN_ATTENTE_VALIDATION');
+        // Use storeCampaigns since the store fetches all campaigns
+        let list = this.storeCampaigns();
+        
+        // If we specifically need pending and local has fetched them but store hasn't for some reason
+        if (list.length === 0 && this.campaigns().length > 0) {
+            list = this.campaigns();
         }
 
-        return q
-            ? list.filter(c =>
-                c.titre.toLowerCase().includes(q) ||
-                c.porteurNom.toLowerCase().includes(q) ||
-                c.categorie.toLowerCase().includes(q)
-            )
-            : list;
+        return list.filter(c => {
+            const matchQ = !q || c.titre.toLowerCase().includes(q) || c.porteurNom.toLowerCase().includes(q) || c.categorie.toLowerCase().includes(q);
+            const matchStatus = sf === 'all' || c.statut === sf;
+            return matchQ && matchStatus;
+        });
     }
 
     percent(c: CampaignResponse): number {

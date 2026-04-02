@@ -26,6 +26,10 @@ import { Router } from '@angular/router';
            style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#475569;text-decoration:none;font-size:14px">
           🚀 Explorer les campagnes
         </a>
+        <a routerLink="/contributeur/supported" routerLinkActive="active-nav"
+           style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#475569;text-decoration:none;font-size:14px">
+          💖 Campagnes soutenues
+        </a>
         <a routerLink="/contributeur/contributions" routerLinkActive="active-nav"
            style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:#475569;text-decoration:none;font-size:14px">
           💳 Mes contributions
