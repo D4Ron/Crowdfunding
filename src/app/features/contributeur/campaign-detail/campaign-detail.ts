@@ -90,7 +90,7 @@ export class CampaignDetail implements OnInit {
           };
         }
 
-        // Also re-fetch from backend for authoritative data
+        // Re-fetch authoritative data from backend (now correctly persisted)
         this.campaignService.getCampaignById(this.campagne!.id).subscribe({
           next: (updated) => (this.campagne = updated),
           error: () => {} // keep the optimistic update on failure
