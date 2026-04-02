@@ -76,21 +76,26 @@ export class CampaignDetail implements OnInit {
     }).subscribe({
       next: (res) => {
         this.isProcessing = false;
-        this.successMessage = `Contribution réussie ! Référence : ${res.referenceTransaction}`;
 
-        // Optimistic update: immediately reflect the contribution in the UI
-        if (this.campagne) {
-          this.campagne = {
-            ...this.campagne,
-            montantCollecte: this.campagne.montantCollecte + res.montantNet,
-            nombreContributeurs: this.campagne.nombreContributeurs + 1,
-            pourcentageAtteint: Math.min(100, Math.round(
-              ((this.campagne.montantCollecte + res.montantNet) / this.campagne.objectifCfa) * 100
-            ))
-          };
+        if (res.statut === 'SUCCESS') {
+          this.successMessage = `Contribution réussie ! Référence : ${res.referenceTransaction}`;
+
+          // Optimistic update: immediately reflect the contribution in the UI
+          if (this.campagne) {
+            this.campagne = {
+              ...this.campagne,
+              montantCollecte: this.campagne.montantCollecte + res.montantNet,
+              nombreContributeurs: this.campagne.nombreContributeurs + 1,
+              pourcentageAtteint: Math.min(100, Math.round(
+                ((this.campagne.montantCollecte + res.montantNet) / this.campagne.objectifCfa) * 100
+              ))
+            };
+          }
+        } else if (res.statut === 'PENDING') {
+          this.successMessage = `Paiement en cours de traitement. Référence : ${res.referenceTransaction}`;
+        } else {
+          this.errorMessage = `Le paiement a échoué. Référence : ${res.referenceTransaction}. Veuillez réessayer.`;
         }
-
-
       },
       error: () => {
         this.isProcessing = false;
